@@ -1,0 +1,12 @@
+const { Router } = require('express')
+const {{lowerCase name}}Controller = require('./controllers/{{lowerCase name}}')
+
+const ROUTES_PREFIX = '/{{lowerCase name}}'
+const router = Router()
+
+router.get('/', {{lowerCase name}}Controller.helloWorld)
+
+module.exports = {
+  ROUTES_PREFIX,
+  router
+}
