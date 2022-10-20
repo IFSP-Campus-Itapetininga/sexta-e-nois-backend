@@ -2,7 +2,9 @@ module.exports = ({
   knex = require('../../../config/database'),
   tableName = 'evento'
 }) => {
-  const create = data => knex.insert(data).into(tableName)
+  const TABLE_NAME = 'eventos';
+
+  const create = data => knex.insert(data).into(TABLE_NAME)
 
   const list = () => knex.select('*').from(tableName)
 
