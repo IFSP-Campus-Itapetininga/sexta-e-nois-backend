@@ -1,18 +1,30 @@
-module.exports = ({
-  knex = require('../../../config/database'),
-  tableName = 'evento'
-}) => {
-  const TABLE_NAME = 'eventos';
+const knex = require('../../../config/database')
 
-  const create = data => knex.insert(data).into(TABLE_NAME)
+module.exports = () => {
+  const TABLE_NAME = 'evento'
 
-  const list = () => knex.select('*').from(tableName)
+  const create = async data => await knex.insert(data).into(TABLE_NAME)
 
-  const find = id => knex.select('*').from(tableName).where({ id })
+  const list = async () => await knex.select('*').from(TABLE_NAME)
 
-  const update = (id, data) => knex.update(data).from(tableName).where({ id })
+  const find = async id => {
+    const result = await knex.select('*').from(TABLE_NAME).where({ id }).first().then(row => row)
+    if (!result) { throw new Error('Event not found') }
 
-  const remove = id => knex.del().from(tableName).where({ id })
+    return result
+  }
+
+  const update = async (id, data) => {
+    await find(id)
+
+    await knex.update(data).from(TABLE_NAME).where({ id })
+  }
+
+  const remove = async id => {
+    await find(id)
+
+    await knex.del().from(TABLE_NAME).where({ id })
+  }
 
   return { create, find, update, remove, list }
 }
