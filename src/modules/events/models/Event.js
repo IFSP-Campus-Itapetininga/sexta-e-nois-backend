@@ -1,5 +1,5 @@
 module.exports = ({
-  knex = require('../../../config/database'),
+  knex = require('../../../data/connection'),
   tableName = 'evento'
 }) => {
   const create = data => knex.insert(data).into(tableName)
