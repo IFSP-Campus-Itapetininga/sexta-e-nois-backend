@@ -1,6 +1,6 @@
 const Event = require('../models/Event')
 
-const eventInstance = Event({})
+const eventModel = Event({})
 
 const create = async (req, res) => {
   const { titulo, dataInicio, dataTermino, local, descricao } = req.body
