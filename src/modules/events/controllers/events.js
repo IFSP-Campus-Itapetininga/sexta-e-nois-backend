@@ -1,12 +1,12 @@
 const Event = require('../models/Event')
 
-const eventInstance = Event({})
+const eventModel = Event()
 
 const create = async (req, res) => {
   const { titulo, dataInicio, dataTermino, local, descricao } = req.body
 
   try {
-    await eventInstance.create({ titulo, dataInicio, dataTermino, local, descricao })
+    await eventModel.create({ titulo, dataInicio, dataTermino, local, descricao })
 
     res.status(201).send()
   } catch (error) {
@@ -16,7 +16,7 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const events = await eventInstance.list()
+    const events = await eventModel.list()
 
     res.send(events)
   } catch (error) {
@@ -28,7 +28,7 @@ const find = async (req, res) => {
   const { id } = req.params
 
   try {
-    const [event] = await eventInstance.find(id)
+    const event = await eventModel.find(id)
 
     res.send(event)
   } catch (error) {
@@ -41,7 +41,7 @@ const update = async (req, res) => {
   const { titulo, dataInicio, dataTermino, local, descricao } = req.body
 
   try {
-    await eventInstance.update(id, { titulo, dataInicio, dataTermino, local, descricao })
+    await eventModel.update(id, { titulo, dataInicio, dataTermino, local, descricao })
 
     res.status(204).send()
   } catch (error) {
@@ -53,7 +53,7 @@ const remove = async (req, res) => {
   const { id } = req.params
 
   try {
-    await eventInstance.remove(id)
+    await eventModel.remove(id)
 
     res.status(204).send()
   } catch (error) {
