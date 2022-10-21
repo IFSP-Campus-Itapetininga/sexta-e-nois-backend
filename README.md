@@ -3,7 +3,7 @@ Esta é a API do projeto Sexta é Nóis. Utiliza JS e MySQL no Docker.
 
 # Requisitos
 [Node.js](https://nodejs.org/en/) - versão testada: 16.10.0<br>
-[Docker](https://www.docker.com/) com Docker Compose - versão testada: 20.10.17; caso esteja desenvolvendo no Windows, baixe o Docker Desktop, que inclui o Docker Compose por padrão.
+[Docker](https://www.docker.com/) com Docker Compose - versão testada: 20.10.17; caso esteja desenvolvendo no Windows, baixe o Docker Desktop, que inclui o Docker Compose por padrão.<br>
 Algum gerenciador de pacotes - recomendo o [Yarn Classic](https://classic.yarnpkg.com/lang/en/) - versão testada: 1.22.17, ou o NPM, que vem com a instalação do Node.
 
 # Bibliotecas utilizadas
