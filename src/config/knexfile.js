@@ -1,9 +1,9 @@
+require('./dotenv')
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 module.exports = {
-
   development: {
     client: 'mysql2',
     connection: {
@@ -14,7 +14,6 @@ module.exports = {
       database: process.env.DB_NAME
     }
   }
-
 
   // production: {
   //   client: 'postgresql',

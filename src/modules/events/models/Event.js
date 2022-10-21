@@ -1,4 +1,4 @@
-const knex = require('../../../config/database')
+const knex = require('../../../data/connection')
 
 module.exports = () => {
   const TABLE_NAME = 'evento'
