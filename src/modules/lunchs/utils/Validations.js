@@ -11,7 +11,7 @@ const ValidationProductUpdateSchema = joi.object({
   preco: joi.number().required()
 })
 
-const ValidationClienteCreateSchema = joi.object({
+const ValidationClientCreateSchema = joi.object({
   nome: joi.string().required(),
   telefone: joi.string().required(),
   rua: joi.string().required(),
@@ -19,7 +19,7 @@ const ValidationClienteCreateSchema = joi.object({
   bairro: joi.string().required()
 })
 
-const ValidationClienteUpdateSchema = joi.object({
+const ValidationClientUpdateSchema = joi.object({
   nome: joi.string().required(),
   telefone: joi.string(),
   rua: joi.string().required(),
@@ -30,6 +30,6 @@ const ValidationClienteUpdateSchema = joi.object({
 module.exports = {
   ValidationProductCreateSchema,
   ValidationProductUpdateSchema,
-  ValidationClienteCreateSchema,
-  ValidationClienteUpdateSchema
+  ValidationClientCreateSchema,
+  ValidationClientUpdateSchema
 }

@@ -44,7 +44,7 @@ module.exports = () => {
       .first()
       .then((row) => row)
     if (!result) {
-      throw new Error('Product not found')
+      throw new Error('Client not found')
     }
 
     return result
