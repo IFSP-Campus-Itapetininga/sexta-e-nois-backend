@@ -12,6 +12,9 @@ module.exports = {
       user: process.env.DB_USER,
       password: process.env.DB_PWD,
       database: process.env.DB_NAME
+    },
+    migrations: {
+      directory: '../data/migrations'
     }
   }
 
@@ -30,5 +33,4 @@ module.exports = {
   //     tableName: 'knex_migrations'
   //   }
   // }
-
 }
