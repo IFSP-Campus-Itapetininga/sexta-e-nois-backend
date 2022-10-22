@@ -13,6 +13,8 @@ router.delete('/produtos/:id', ProdutoController.deleteProduct)
 
 // Clientes
 router.get('/clientes/', ClienteController.getAllClients)
+router.get('/clientes/telefone', ClienteController.getClientByPhone)
+router.get('/clientes/:id', ClienteController.getClient)
 router.post('/clientes/', ClienteController.createClient)
 router.put('/clientes/:id', ClienteController.updateClient)
 router.delete('/clientes/:id', ClienteController.deleteClient)

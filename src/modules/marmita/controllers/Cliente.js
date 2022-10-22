@@ -1,6 +1,41 @@
 const ClienteModel = require('../models/Cliente')
 const validations = require('./Validations')
 
+const getClient = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const data = await ClienteModel().find(id)
+    res.json(data).status(200)
+  } catch (error) {
+    res.status(400).json({
+      message: error?.message
+    })
+  }
+}
+
+const getClientByPhone = async (req, res) => {
+  try {
+    const { search } = req.query
+
+    const data = await ClienteModel().findByPhone(search)
+
+    if (!data) {
+      res.status(404).json({
+        message: 'Cliente não encontrado'
+      })
+
+      return
+    }
+
+    res.json(data).status(200)
+  } catch (error) {
+    res.status(400).json({
+      message: error?.message
+    })
+  }
+}
+
 const getAllClients = async (req, res) => {
   try {
     const query = req.query
@@ -105,6 +140,8 @@ const deleteClient = async (req, res) => {
 }
 
 module.exports = {
+  getClient,
+  getClientByPhone,
   getAllClients,
   createClient,
   updateClient,
