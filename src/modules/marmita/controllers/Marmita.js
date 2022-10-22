@@ -2,8 +2,19 @@ const MarmitaModel = require('../models/Marmita')
 const validations = require('./Validations')
 
 const getAllProducts = async (req, res) => {
-  const data = await MarmitaModel().list()
-  res.json(data).status(200)
+  try {
+    const query = req.query
+
+    const page = query.page - 1 || 0
+    const limit = +query.limit || 10
+
+    const data = await MarmitaModel().list(page, limit)
+    res.json(data).status(200)
+  } catch (error) {
+    res.status(400).json({
+      message: error?.message
+    })
+  }
 }
 
 const createProduct = async (req, res) => {
