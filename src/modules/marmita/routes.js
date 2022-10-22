@@ -1,13 +1,21 @@
 const { Router } = require('express')
-const marmitaController = require('./controllers/marmita')
+const ProdutoController = require('./controllers/Produto')
+const ClienteController = require('./controllers/Cliente')
 
 const ROUTES_PREFIX = '/marmita'
 const router = Router()
 
-router.get('/', marmitaController.getAllProducts)
-router.post('/', marmitaController.createProduct)
-router.put('/:id', marmitaController.updateProduct)
-router.delete('/:id', marmitaController.deleteProduct)
+// Produtos
+router.get('/produtos/', ProdutoController.getAllProducts)
+router.post('/produtos/', ProdutoController.createProduct)
+router.put('/produtos/:id', ProdutoController.updateProduct)
+router.delete('/produtos/:id', ProdutoController.deleteProduct)
+
+// Clientes
+router.get('/clientes/', ClienteController.getAllClients)
+router.post('/clientes/', ClienteController.createClient)
+router.put('/clientes/:id', ClienteController.updateClient)
+router.delete('/clientes/:id', ClienteController.deleteClient)
 
 module.exports = {
   ROUTES_PREFIX,

@@ -1,4 +1,4 @@
-const MarmitaModel = require('../models/Marmita')
+const ProdutoModel = require('../models/Produto')
 const validations = require('./Validations')
 
 const getAllProducts = async (req, res) => {
@@ -8,7 +8,7 @@ const getAllProducts = async (req, res) => {
     const page = query.page - 1 || 0
     const limit = +query.limit || 10
 
-    const data = await MarmitaModel().list(page, limit)
+    const data = await ProdutoModel().list(page, limit)
     res.json(data).status(200)
   } catch (error) {
     res.status(400).json({
@@ -20,7 +20,7 @@ const getAllProducts = async (req, res) => {
 const createProduct = async (req, res) => {
   try {
     const data = req.body
-    const validation = validations.ValidationCreateSchema.validate(data)
+    const validation = validations.ValidationProductSchema.validate(data)
 
     if (validation.error) {
       res.status(400).json({
@@ -31,7 +31,7 @@ const createProduct = async (req, res) => {
       return
     }
 
-    await MarmitaModel().create(data)
+    await ProdutoModel().create(data)
 
     res.status(201).json()
   } catch (error) {
@@ -45,7 +45,7 @@ const updateProduct = async (req, res) => {
   try {
     const id = req.params.id
     const data = req.body
-    const validation = validations.ValidationCreateSchema.validate(data)
+    const validation = validations.ValidationProductSchema.validate(data)
 
     if (validation.error) {
       res.status(400).json({
@@ -56,8 +56,8 @@ const updateProduct = async (req, res) => {
       return
     }
 
-    await MarmitaModel().update(id, data)
-    const product = await MarmitaModel().find(id)
+    await ProdutoModel().update(id, data)
+    const product = await ProdutoModel().find(id)
 
     res.status(200).json(product)
   } catch (error) {
@@ -71,7 +71,7 @@ const deleteProduct = async (req, res) => {
   try {
     const id = req.params.id
 
-    await MarmitaModel().remove(id)
+    await ProdutoModel().remove(id)
 
     res.status(202).json()
   } catch (error) {
