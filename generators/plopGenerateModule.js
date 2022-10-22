@@ -16,7 +16,7 @@
       },
       {
         type: 'add',
-        path: '../src/modules/{{lowerCase name}}/controllers/{{lowerCase name}}.js',
+        path: '../src/modules/{{lowerCase name}}/controllers/{{pascalCase name}}.js',
         templateFile: './templates/controllers.js.hbs'
       },
       {
