@@ -21,7 +21,8 @@
       },
       {
         type: 'add',
-        path: '../src/modules/{{lowerCase name}}/models/.gitkeep'
+        path: '../src/modules/{{lowerCase name}}/models/{{pascalCase name}}.js',
+        templateFile: './templates/model.js.hbs'
       }
     ]
   })
