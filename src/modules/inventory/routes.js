@@ -1,13 +1,18 @@
 const { Router } = require('express')
-const inventoryController = require('./controllers/inventory')
+const InventoryController = require('./controllers/inventory')
 
 const ROUTES_PREFIX = '/inventory'
 const router = Router()
 
-router.get('/', inventoryController.listItems)
-router.get('/:iditem', inventoryController.findItem)
-router.post('/', inventoryController.createItem)
-router.delete('/:iditem', inventoryController.removeItem)
+// items
+router.get('/item/', InventoryController.listItems)
+router.get('/item/:iditem', InventoryController.findItem)
+router.post('/item/', InventoryController.createItem)
+router.delete('/item/:iditem', InventoryController.removeItem)
+
+// transactions
+router.get('/transactions/:iditem', InventoryController.listItemTransactions)
+router.post('/transactions/', InventoryController.createItemTransaction)
 
 module.exports = {
   ROUTES_PREFIX,

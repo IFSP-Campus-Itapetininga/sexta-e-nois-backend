@@ -8,7 +8,6 @@ module.exports = () => {
   const list = async () => await knex.select('*').from(TABLE_NAME)
 
   const find = async iditem => {
-    const TABLE_NAME = 'inventory_item'
     const result = await knex.select('*').from(TABLE_NAME).where({ iditem }).first().then(row => row)
     if (!result) { throw new Error('Item not found') }
 
@@ -21,11 +20,18 @@ module.exports = () => {
     await knex.update(data).from(TABLE_NAME).where({ iditem })
   }
 
-  const remove = async iditem => {
+  const updateLastPurchase = async (iditem, lastPurchase) => {
     await find(iditem)
 
-    await knex.del().from(TABLE_NAME).where({ iditem })
+    await knex(TABLE_NAME).where({ iditem }).update({ lastPurchase })
   }
 
-  return { create, find, update, remove, list }
+  const remove = async iditem => {
+    await find(iditem)
+    await knex(TABLE_NAME).where({ iditem }).update('active', false)
+
+    // await knex.del().from(TABLE_NAME).where({ iditem })
+  }
+
+  return { create, find, update, remove, list, updateLastPurchase }
 }
