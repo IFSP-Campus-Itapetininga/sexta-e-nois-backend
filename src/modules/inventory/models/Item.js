@@ -1,7 +1,7 @@
 const knex = require('../../../data/connection')
 
 module.exports = () => {
-  const TABLE_NAME = 'inventory_item'
+  const TABLE_NAME = 'item'
 
   const create = async data => await knex.insert(data).into(TABLE_NAME)
 
@@ -26,6 +26,15 @@ module.exports = () => {
     await knex(TABLE_NAME).where({ iditem }).update({ lastPurchase })
   }
 
+  const updateCurbal = async (iditem, lastPurchase) => {
+    await find(iditem)
+
+    const curbal = await knex('item_transaction').sum('quantity as qtd').where('iditem_fk', iditem)
+    console.log(curbal[0].qtd)
+
+    await knex(TABLE_NAME).where({ iditem }).update({ curbal: curbal[0].qtd })
+  }
+
   const remove = async iditem => {
     await find(iditem)
     await knex(TABLE_NAME).where({ iditem }).update('active', false)
@@ -33,5 +42,5 @@ module.exports = () => {
     // await knex.del().from(TABLE_NAME).where({ iditem })
   }
 
-  return { create, find, update, remove, list, updateLastPurchase }
+  return { create, find, update, remove, list, updateLastPurchase, updateCurbal }
 }

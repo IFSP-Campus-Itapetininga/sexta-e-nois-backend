@@ -9,6 +9,7 @@ router.get('/item/', InventoryController.listItems)
 router.get('/item/:iditem', InventoryController.findItem)
 router.post('/item/', InventoryController.createItem)
 router.delete('/item/:iditem', InventoryController.removeItem)
+router.patch('/item/:iditem', InventoryController.updateItem)
 
 // transactions
 router.get('/transactions/:iditem', InventoryController.listItemTransactions)

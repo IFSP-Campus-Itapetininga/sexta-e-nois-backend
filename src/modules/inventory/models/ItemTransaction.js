@@ -1,12 +1,12 @@
 const knex = require('../../../data/connection')
 
 module.exports = () => {
-  const TABLE_NAME = 'inventory_item_transaction'
+  const TABLE_NAME = 'item_transaction'
 
   const create = async data => await knex.insert(data).into(TABLE_NAME)
 
   const list = async iditem => {
-    const result = await knex.select('*').from(TABLE_NAME).where('iditem', iditem)
+    const result = await knex.select('*').from(TABLE_NAME).where('iditem_fk', iditem)
     if (!result) { throw new Error('Transactions not found') }
 
     return result

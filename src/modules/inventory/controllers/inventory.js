@@ -125,16 +125,18 @@ const createItemTransaction = async (req, res) => {
   const { iditem, quantity, user, memo, transdate } = req.body
 
   try {
-    const transaction = await itemTransactionModel.create({ inventory_item_iditem: iditem, quantity, user, memo, transdate })
+    const transaction = await itemTransactionModel.create({ iditem_fk: iditem, quantity, user, memo, transdate })
     if (transaction) {
       let date = new Date()
       date = date.toJSON().replaceAll('/', '-').replaceAll('T', ' ').replaceAll('Z', '').replace('.000', '')
       const updateItem = await itemModel.updateLastPurchase(iditem, date)
-      if (updateItem) {
+      const updateCurbal = await itemModel.updateCurbal(iditem)
+      if (updateItem && updateCurbal) {
         console.log(updateItem)
+        console.log(updateCurbal)
       }
     }
-    res.status(201).send({ idinventory_item_transaction: transaction[0] })
+    res.status(201).send({ iditem_fk: transaction[0] })
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
