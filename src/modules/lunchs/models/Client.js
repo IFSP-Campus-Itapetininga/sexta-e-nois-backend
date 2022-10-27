@@ -1,7 +1,7 @@
 const knex = require('../../../data/connection')
 
 module.exports = () => {
-  const TABLE_NAME = 'marmita_produto'
+  const TABLE_NAME = 'marmita_cliente'
 
   /**
    *
@@ -53,10 +53,28 @@ module.exports = () => {
   /**
    *
    * @param {number} id
+   * @returns {*}
+   */
+  const findByPhone = async (phone) => {
+    const result = await knex
+      .select('*')
+      .from(TABLE_NAME)
+      .where({ telefone: phone })
+      .first()
+      .then((row) => row)
+
+    return result
+  }
+
+  /**
+   *
+   * @param {number} id
    * @param {*} data
    */
   const update = async (id, data) => {
-    await find(id)
+    const cliente = await find(id)
+
+    data.telefone = cliente.telefone
 
     await knex.update(data).from(TABLE_NAME).where({ id })
   }
@@ -71,5 +89,5 @@ module.exports = () => {
     await knex.del().from(TABLE_NAME).where({ id })
   }
 
-  return { create, find, update, remove, list }
+  return { create, find, update, remove, list, findByPhone }
 }
