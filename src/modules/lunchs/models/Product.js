@@ -44,7 +44,27 @@ module.exports = () => {
       .first()
       .then((row) => row)
     if (!result) {
-      throw new Error('Client not found')
+      throw new Error('Product not found')
+    }
+
+    return result
+  }
+
+  /**
+   *
+   * @param {string} name
+   * @returns {*}
+   */
+  const search = async (name) => {
+    const result = await knex
+      .select('*')
+      .from(TABLE_NAME)
+      .where('titulo', 'LIKE', `%${name}%`)
+      .first()
+      .then((row) => row)
+
+    if (!result) {
+      throw new Error('Product not found')
     }
 
     return result
@@ -71,5 +91,5 @@ module.exports = () => {
     await knex.del().from(TABLE_NAME).where({ id })
   }
 
-  return { create, find, update, remove, list }
+  return { create, find, update, remove, list, search }
 }

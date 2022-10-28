@@ -11,6 +11,10 @@ const ValidationProductUpdateSchema = joi.object({
   preco: joi.number().required()
 })
 
+const ValidationProductSearchSchema = joi.object({
+  title: joi.string().required()
+})
+
 const ValidationClientCreateSchema = joi.object({
   nome: joi.string().required(),
   telefone: joi.string().required(),
@@ -28,6 +32,7 @@ const ValidationClientUpdateSchema = joi.object({
 })
 
 module.exports = {
+  ValidationProductSearchSchema,
   ValidationProductCreateSchema,
   ValidationProductUpdateSchema,
   ValidationClientCreateSchema,
