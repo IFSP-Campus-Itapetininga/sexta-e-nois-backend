@@ -15,10 +15,19 @@ module.exports = () => {
    * @param {number} page
    * @param {number} limit
    */
-  const list = async (page = 0, limit = 10) => {
+  const list = async (page = 0, limit = 10, search) => {
     const [count, data] = await Promise.all([
       knex.from(TABLE_NAME).count(),
-      knex.select('*').from(TABLE_NAME).offset(page).limit(limit)
+      knex
+        .select('*')
+        .from(TABLE_NAME)
+        .modify(function (queryBuilder) {
+          if (!!search) {
+            queryBuilder.where('titulo', 'LIKE', `%${search}%`)
+          }
+        })
+        .offset(page)
+        .limit(limit)
     ])
 
     const quantity = count[0]['count(*)']
@@ -52,19 +61,21 @@ module.exports = () => {
 
   /**
    *
-   * @param {string} name
+   * @param {number} id
    * @returns {*}
    */
-  const search = async (name) => {
+  const findMany = async (id) => {
     const result = await knex
       .select('*')
       .from(TABLE_NAME)
-      .where('titulo', 'LIKE', `%${name}%`)
-      .first()
+      .whereIn('id', id)
       .then((row) => row)
 
-    if (!result) {
-      throw new Error('Product not found')
+    if (id.length !== result.length) {
+      const resultIds = result.map((item) => item.id)
+      const notIncluded = id.filter((item) => !resultIds.includes(item))
+
+      throw new Error(`Product ${notIncluded[0]} not find`)
     }
 
     return result
@@ -91,5 +102,5 @@ module.exports = () => {
     await knex.del().from(TABLE_NAME).where({ id })
   }
 
-  return { create, find, update, remove, list, search }
+  return { create, find, update, remove, list, findMany }
 }
