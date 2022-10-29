@@ -7,8 +7,47 @@ const getAllProducts = async (req, res) => {
 
     const page = query.page - 1 || 0
     const limit = +query.limit || 10
+    const search = query.search || null
 
-    const data = await ProductModel().list(page, limit)
+    const data = await ProductModel().list(page, limit, search)
+    res.json(data).status(200)
+  } catch (error) {
+    res.status(400).json({
+      message: error?.message
+    })
+  }
+}
+
+const getProduct = async (req, res) => {
+  try {
+    const id = req.params.id
+
+    const data = await ProductModel().find(id)
+    res.json(data).status(200)
+  } catch (error) {
+    res.status(400).json({
+      message: error?.message
+    })
+  }
+}
+
+const getProductByCriteria = async (req, res) => {
+  try {
+    const query = req.query
+    const validation = validations.ValidationProductSearchSchema.validate(query)
+
+    if (validation.error) {
+      res.status(400).json({
+        message: 'Validation Error',
+        data: validation.error.details
+      })
+
+      return
+    }
+
+    const title = query.title
+
+    const data = await ProductModel().search(title)
     res.json(data).status(200)
   } catch (error) {
     res.status(400).json({
@@ -83,6 +122,8 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
   getAllProducts,
+  getProductByCriteria,
+  getProduct,
   createProduct,
   updateProduct,
   deleteProduct
