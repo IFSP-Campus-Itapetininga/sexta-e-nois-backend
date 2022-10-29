@@ -15,10 +15,21 @@ module.exports = () => {
    * @param {number} page
    * @param {number} limit
    */
-  const list = async (page = 0, limit = 10) => {
+  const list = async (page = 0, limit = 10, search) => {
     const [count, data] = await Promise.all([
       knex.from(TABLE_NAME).count(),
-      knex.select('*').from(TABLE_NAME).offset(page).limit(limit)
+      knex
+        .select('*')
+        .from(TABLE_NAME)
+        .modify(function (queryBuilder) {
+          if (!!search) {
+            const serchType = /^[0-9]*$/g.test(search) ? 'telefone' : 'nome'
+
+            queryBuilder.where(serchType, 'LIKE', `%${search}%`)
+          }
+        })
+        .offset(page)
+        .limit(limit)
     ])
 
     const quantity = count[0]['count(*)']
