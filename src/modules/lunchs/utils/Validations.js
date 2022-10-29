@@ -27,9 +27,39 @@ const ValidationClientUpdateSchema = joi.object({
   bairro: joi.string().required()
 })
 
+const ValidationOrderCreateSchema = joi.object({
+  delivery: joi.boolean(),
+  clienteId: joi.number().required(),
+  produtos: joi.array().items({
+    id: joi.number().required(),
+    titulo: joi.string(),
+    preco: joi.number(),
+    quantidade: joi.number().required()
+  })
+})
+
+const ValidationOrderUpdateSchema = joi.object({
+  delivery: joi.boolean(),
+  status: joi.string().valid('started', 'finalized', 'canceled').required(),
+  clienteId: joi.number(),
+  produtos: joi.array().items({
+    id: joi.number().required(),
+    titulo: joi.string(),
+    preco: joi.number(),
+    quantidade: joi.number().required()
+  })
+})
+
+const ValidationOrderUpdateStatusSchema = joi.object({
+  status: joi.string().valid('started', 'finalized', 'canceled').required()
+})
+
 module.exports = {
   ValidationProductCreateSchema,
   ValidationProductUpdateSchema,
   ValidationClientCreateSchema,
-  ValidationClientUpdateSchema
+  ValidationClientUpdateSchema,
+  ValidationOrderCreateSchema,
+  ValidationOrderUpdateSchema,
+  ValidationOrderUpdateStatusSchema
 }
