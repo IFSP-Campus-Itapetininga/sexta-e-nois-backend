@@ -3,16 +3,17 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-  return knex.schema.createTable('tb_perg', (table) => {
+return knex.schema.createTable('tb_usuario', (table) => {
     table.increments('id').unsigned().primary()
-    table.integer('id_prof').unsigned()
-    table.foreign('id_prof').references('tb_prof.id')
-    table.integer('id_grp').unsigned()
-    table.foreign('id_grp').references('tb_grp.id')
-    table.string('descricao').nullable()
+    table.string('nome').notNullable()
+
+    table.index(['nome'], 'idx_nome', {
+        storageEngineIndexType: 'hash',})
+
+    table.string('tipo').notNullable()
     table.timestamp('criadoEm').defaultTo(knex.fn.now())
     table.timestamp('alteradoEm').defaultTo(knex.fn.now())
-  })
+    })
 }
 
 /**
@@ -20,5 +21,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.dropTable('tb_perg')
+    return knex.schema.dropTable('tb_usuario')
 }

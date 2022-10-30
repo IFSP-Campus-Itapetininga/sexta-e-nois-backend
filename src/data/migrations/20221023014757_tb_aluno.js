@@ -5,10 +5,9 @@
 exports.up = function(knex) {
   return knex.schema.createTable('tb_aluno', (table) => {
     table.increments('id').unsigned().primary()
-    table.string('nome').notNullable()
-    table.index(['nome'], 'idx_nome', {
-      storageEngineIndexType: 'hash',});
-    table.date('dataNasc').nullable()
+    table.integer('id_usuario').unsigned()
+    table.foreign('id_usuario').references('tb_usuario.id')
+    table.string('motivo_atend')
     table.timestamp('criadoEm').defaultTo(knex.fn.now())
     table.timestamp('alteradoEm').defaultTo(knex.fn.now())
   })
