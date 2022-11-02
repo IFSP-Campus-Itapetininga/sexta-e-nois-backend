@@ -3,10 +3,10 @@ const Event = require('../models/Event')
 const eventModel = Event()
 
 const create = async (req, res) => {
-  const { titulo, dataInicio, dataTermino, local, descricao } = req.body
+  const { titulo, dataInicio, dataTermino, local, responsavel, descricao } = req.body
 
   try {
-    await eventModel.create({ titulo, dataInicio, dataTermino, local, descricao })
+    await eventModel.create({ titulo, dataInicio, dataTermino, local, responsavel, descricao })
 
     res.status(201).send()
   } catch (error) {
@@ -38,10 +38,10 @@ const find = async (req, res) => {
 
 const update = async (req, res) => {
   const { id } = req.params
-  const { titulo, dataInicio, dataTermino, local, descricao } = req.body
+  const { titulo, dataInicio, dataTermino, local, responsavel, descricao } = req.body
 
   try {
-    await eventModel.update(id, { titulo, dataInicio, dataTermino, local, descricao })
+    await eventModel.update(id, { titulo, dataInicio, dataTermino, local, responsavel, descricao })
 
     res.status(204).send()
   } catch (error) {
