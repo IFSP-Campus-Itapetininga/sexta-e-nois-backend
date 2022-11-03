@@ -26,12 +26,15 @@ module.exports = () => {
     await knex(TABLE_NAME).where({ iditem }).update({ lastPurchase })
   }
 
+  const getCurbal = async (iditem) => {
+    await find(iditem)
+    const curbal = await knex('item_transaction').sum('quantity as qtd').where('iditem_fk', iditem)
+    return curbal
+  }
   const updateCurbal = async (iditem, lastPurchase) => {
     await find(iditem)
-
     const curbal = await knex('item_transaction').sum('quantity as qtd').where('iditem_fk', iditem)
-    console.log(curbal[0].qtd)
-
+    console.log(parseInt(curbal[0].qtd))
     await knex(TABLE_NAME).where({ iditem }).update({ curbal: curbal[0].qtd })
   }
 
@@ -42,5 +45,5 @@ module.exports = () => {
     // await knex.del().from(TABLE_NAME).where({ iditem })
   }
 
-  return { create, find, update, remove, list, updateLastPurchase, updateCurbal }
+  return { create, find, update, remove, list, updateLastPurchase, updateCurbal, getCurbal }
 }

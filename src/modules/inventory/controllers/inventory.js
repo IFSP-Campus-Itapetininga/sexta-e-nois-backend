@@ -94,7 +94,7 @@ const listItemTransactions = async (req, res) => {
       transactions: transactions.map(function (transaction) {
         return {
           idinventory_item_transaction: transaction.idinventory_item_transaction,
-          quantity: transaction.quantity,
+          quantity: parseInt(transaction.quantity),
           user: transaction.user,
           memo: transaction.memo,
           transdate: transaction.transdate.toJSON().replaceAll('/', '-').replaceAll('T', ' ').replaceAll('Z', '').replace('.000', ''),
@@ -107,7 +107,7 @@ const listItemTransactions = async (req, res) => {
         return {
           iditem: item.iditem,
           description: item.description,
-          curbal: item.curbal,
+          curbal: parseInt(item.curbal),
           active: item.active,
           lastPurchase: item.lastPurchase.toJSON().replaceAll('/', '-').replaceAll('T', ' ').replaceAll('Z', '').replace('.000', ''),
           transactions: responseTransaction.transactions
@@ -123,22 +123,28 @@ const listItemTransactions = async (req, res) => {
 
 const createItemTransaction = async (req, res) => {
   const { iditem, quantity, user, memo, transdate } = req.body
+  const curbal = await itemModel.getCurbal(iditem)
+  const itemcurbal = parseInt(curbal[0].qtd)
 
-  try {
-    const transaction = await itemTransactionModel.create({ iditem_fk: iditem, quantity, user, memo, transdate })
-    if (transaction) {
-      let date = new Date()
-      date = date.toJSON().replaceAll('/', '-').replaceAll('T', ' ').replaceAll('Z', '').replace('.000', '')
-      const updateItem = await itemModel.updateLastPurchase(iditem, date)
-      const updateCurbal = await itemModel.updateCurbal(iditem)
-      if (updateItem && updateCurbal) {
-        console.log(updateItem)
-        console.log(updateCurbal)
+  if (itemcurbal + parseInt(quantity) >= 0) {
+    try {
+      const transaction = await itemTransactionModel.create({ iditem_fk: iditem, quantity, user, memo, transdate })
+      if (transaction) {
+        let date = new Date()
+        date = date.toJSON().replaceAll('/', '-').replaceAll('T', ' ').replaceAll('Z', '').replace('.000', '')
+        const updateItem = await itemModel.updateLastPurchase(iditem, date)
+        const updateCurbal = await itemModel.updateCurbal(iditem)
+        if (updateItem && updateCurbal) {
+          console.log(updateItem)
+          console.log(updateCurbal)
+        }
       }
+      res.status(201).send({ iditem_fk: transaction[0] })
+    } catch (error) {
+      res.status(400).json({ error: error.message })
     }
-    res.status(201).send({ iditem_fk: transaction[0] })
-  } catch (error) {
-    res.status(400).json({ error: error.message })
+  } else {
+    res.status(304).json({ message: 'Balance cannot be less than zero' })
   }
 }
 
