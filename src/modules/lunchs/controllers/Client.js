@@ -21,7 +21,7 @@ const getClientByPhone = async (req, res) => {
     const data = await ClientModel().findByPhone(search)
 
     if (!data) {
-      res.status(404).json({
+      res.status(204).json({
         message: 'Cliente não encontrado'
       })
 
@@ -90,9 +90,9 @@ const createClient = async (req, res) => {
       return
     }
 
-    await ClientModel().create(data)
+    const client = await ClientModel().create(data)
 
-    res.status(201).json()
+    res.status(200).json({ id: client })
   } catch (error) {
     res.status(400).json({
       message: error?.message
