@@ -21,9 +21,7 @@ const getClientByPhone = async (req, res) => {
     const data = await ClientModel().findByPhone(search)
 
     if (!data) {
-      res.status(204).json({
-        message: 'Cliente não encontrado'
-      })
+      res.status(204).json({})
 
       return
     }
