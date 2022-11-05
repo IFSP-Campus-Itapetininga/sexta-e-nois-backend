@@ -10,12 +10,12 @@ const verifyAuth = (req, res, next) => {
   const [, token] = authenticationHeader.split(' ')
 
   try {
-    const { sub: id, name, role } = jwt.verify(token, jwtSecret)
+    const { sub: userId, userName, roleName } = jwt.verify(token, jwtSecret)
 
     req.user = {
-      id,
-      name,
-      role
+      userId,
+      userName,
+      roleName
     }
 
     return next()

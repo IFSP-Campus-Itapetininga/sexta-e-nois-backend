@@ -9,19 +9,12 @@ const create = async (req, res) => {
 
   try {
     const foundUser = await userModel.findByEmailAndPassword(email, senha)
-    // const foundUser = {
-    //   id: 1,
-    //   nome: 'Bob',
-    //   email: 'bob@sextaenois.com.br',
-    //   senha: 'admin123', // senha devera ser encriptada na versao final
-    //   papel: 1
-    // }
 
     if (email === foundUser.email && senha === foundUser.senha) {
       const token = jwt.sign({
-        subject: foundUser.id,
-        name: foundUser.nome,
-        role: foundUser.papel
+        userId: foundUser.id,
+        userName: foundUser.nome,
+        roleName: foundUser.nomePapel
       }, jwtSecret)
 
       res.send({ token })

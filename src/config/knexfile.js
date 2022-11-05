@@ -15,7 +15,8 @@ module.exports = {
     },
     migrations: {
       directory: '../data/migrations'
-    }
+    },
+    debug: true
   }
 
   // production: {
