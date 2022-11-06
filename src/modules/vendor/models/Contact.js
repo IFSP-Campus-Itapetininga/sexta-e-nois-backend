@@ -7,24 +7,31 @@ module.exports = () => {
 
   const list = async () => await knex.select('*').from(TABLE_NAME)
 
-  const find = async id => {
-    const result = await knex.select('*').from(TABLE_NAME).where({ id }).first().then(row => row)
+  const listByVendor = async vendorid => {
+    const result = await knex.select('*').from(TABLE_NAME).where({ inventory_vendor_idinventory_vendor: vendorid })
+    if (!result) { throw new Error('Address not found') }
+
+    return result
+  }
+
+  const find = async contactid => {
+    const result = await knex.select('*').from(TABLE_NAME).where({ idvendor_contact: contactid }).first().then(row => row)
     if (!result) { throw new Error('Contact not found') }
 
     return result
   }
 
-  const update = async (id, data) => {
-    await find(id)
+  const update = async (contactid, data) => {
+    await find(contactid)
 
-    await knex.update(data).from(TABLE_NAME).where({ id })
+    await knex.update(data).from(TABLE_NAME).where({ idvendor_contact: contactid })
   }
 
-  const remove = async id => {
-    await find(id)
+  const remove = async contactid => {
+    await find(contactid)
 
-    await knex.del().from(TABLE_NAME).where({ id })
+    await knex.del().from(TABLE_NAME).where({ idvendor_contact: contactid })
   }
 
-  return { create, find, update, remove, list }
+  return { create, find, update, remove, list, listByVendor }
 }

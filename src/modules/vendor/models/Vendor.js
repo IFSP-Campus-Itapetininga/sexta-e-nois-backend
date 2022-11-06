@@ -7,10 +7,9 @@ module.exports = () => {
 
   const list = async () => await knex.select('*').from(TABLE_NAME)
 
-  const find = async id => {
-    const result = await knex.select('*').from(TABLE_NAME).where({ id }).first().then(row => row)
+  const find = async vendorid => {
+    const result = await knex.select('*').from(TABLE_NAME).where({ idinventory_vendor: vendorid }).first().then(row => row)
     if (!result) { throw new Error('Vendor not found') }
-
     return result
   }
 

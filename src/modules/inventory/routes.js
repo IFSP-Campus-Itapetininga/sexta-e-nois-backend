@@ -15,6 +15,7 @@ router.patch('/item/:iditem', InventoryController.updateItem)
 router.get('/transactions/:iditem', InventoryController.listItemTransactions)
 router.post('/transactions/', InventoryController.createItemTransaction)
 
+
 module.exports = {
   ROUTES_PREFIX,
   router

@@ -75,7 +75,6 @@ const updateItem = async (req, res) => {
 
 const removeItem = async (req, res) => {
   const { iditem } = req.params
-
   try {
     await itemModel.remove(iditem)
     res.status(204).send()
@@ -125,10 +124,11 @@ const createItemTransaction = async (req, res) => {
   const { iditem, quantity, user, memo, transdate } = req.body
   const curbal = await itemModel.getCurbal(iditem)
   const itemcurbal = parseInt(curbal[0].qtd)
+  console.log(curbal[0].qtd)
 
-  if (itemcurbal + parseInt(quantity) >= 0) {
+  if (itemcurbal + parseInt(quantity) >= 0 || curbal[0].qtd === null) {
     try {
-      const transaction = await itemTransactionModel.create({ iditem_fk: iditem, quantity, user, memo, transdate })
+      const transaction = await itemTransactionModel.create({ inventory_item_iditem: iditem, quantity, user, memo, transdate })
       if (transaction) {
         let date = new Date()
         date = date.toJSON().replaceAll('/', '-').replaceAll('T', ' ').replaceAll('Z', '').replace('.000', '')
