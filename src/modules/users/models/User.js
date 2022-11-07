@@ -3,7 +3,7 @@ const knex = require('../../../data/connection')
 module.exports = () => {
   const TABLE_NAME = 'usuario'
 
-  const create = async data => await knex.insert(data).into(TABLE_NAME)
+  const create = async data => await knex.insert(data).into(TABLE_NAME).then(([id]) => id)
 
   const list = async (page = 0, limit = 10) => {
     const [count, data] = await Promise.all([
@@ -28,12 +28,11 @@ module.exports = () => {
     return result
   }
 
-  const findByEmailAndPassword = async (email, senha) => {
+  const findByUsername = async (nome) => {
     const result = await knex
       .select(
       `${TABLE_NAME}.id`,
       `${TABLE_NAME}.nome`,
-      `${TABLE_NAME}.email`,
       `${TABLE_NAME}.senha`,
       `${TABLE_NAME}.idPapel`,
       'papel.nome as nomePapel'
@@ -44,7 +43,7 @@ module.exports = () => {
       `${TABLE_NAME}.idPapel`,
       'papel.id'
       )
-      .where({ email, senha })
+      .where({ 'usuario.nome': nome })
       .first()
       .then(row => row)
     if (!result) { throw new Error('User not found') }
@@ -64,5 +63,5 @@ module.exports = () => {
     await knex.del().from(TABLE_NAME).where({ id })
   }
 
-  return { create, findById, findByEmailAndPassword, update, remove, list }
+  return { create, findById, findByUsername, update, remove, list }
 }
