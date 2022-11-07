@@ -8,6 +8,7 @@ exports.up = function (knex) {
     table.string('nome').notNullable()
     table.tinyint('alfabetizado').nullable()
     table.string('escolaridade').nullable()
+    table.string('oficina').nullable()
     table.dateTime('dataNascimento').nullable()
     table.dateTime('dataCadastro').nullable()
     table.string('nomeResponsavel').nullable()

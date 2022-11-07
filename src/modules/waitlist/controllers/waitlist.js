@@ -3,10 +3,10 @@ const Waitlist = require('../models/Waitlist')
 const waitlistModel = Waitlist()
 
 const create = async (req, res) => {
-  const { nome, alfabetizado, escolaridade, dataNascimento, dataCadastro, nomeResponsavel, telefone } = req.body
+  const { nome, alfabetizado, escolaridade, oficina, dataNascimento, dataCadastro, nomeResponsavel, telefone } = req.body
 
   try {
-    await waitlistModel.create({ nome, alfabetizado, escolaridade, dataNascimento, dataCadastro, nomeResponsavel, telefone })
+    await waitlistModel.create({ nome, alfabetizado, escolaridade, oficina, dataNascimento, dataCadastro, nomeResponsavel, telefone })
 
     res.status(201).send()
   } catch (error) {
@@ -38,10 +38,10 @@ const find = async (req, res) => {
 
 const update = async (req, res) => {
   const { id } = req.params
-  const { nome, alfabetizado, escolaridade, dataNascimento, dataCadastro, nomeResponsavel, telefone } = req.body
+  const { nome, alfabetizado, escolaridade, oficina, dataNascimento, dataCadastro, nomeResponsavel, telefone } = req.body
 
   try {
-    await waitlistModel.update(id, { nome, alfabetizado, escolaridade, dataNascimento, dataCadastro, nomeResponsavel, telefone })
+    await waitlistModel.update(id, { nome, alfabetizado, escolaridade, oficina, dataNascimento, dataCadastro, nomeResponsavel, telefone })
 
     res.status(204).send()
   } catch (error) {
