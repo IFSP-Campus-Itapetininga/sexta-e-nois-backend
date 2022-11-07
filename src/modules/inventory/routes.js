@@ -15,6 +15,10 @@ router.patch('/item/:iditem', InventoryController.updateItem)
 router.get('/transactions/:iditem', InventoryController.listItemTransactions)
 router.post('/transactions/', InventoryController.createItemTransaction)
 
+// Item Has Vendor
+router.post('/item/vendor', InventoryController.createItemHasVendor)
+router.get('/item/vendor/itemhasvendor', InventoryController.listItemHasVendor)
+router.delete('/item/vendor/itemhasvendor', InventoryController.removeItemHasVendor)
 
 module.exports = {
   ROUTES_PREFIX,

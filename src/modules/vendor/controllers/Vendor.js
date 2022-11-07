@@ -92,7 +92,9 @@ const findVendor = async (req, res) => {
         return {
           vendor: vendor.vendor,
           description: vendor.description,
+          // eslint-disable-next-line object-shorthand
           contact: contact,
+          // eslint-disable-next-line object-shorthand
           address: address
         }
       })
@@ -115,11 +117,24 @@ const updateAddress = async (req, res) => {
     res.status(400).json({ error: error.message })
   }
 }
+
+const updateContact = async (req, res) => {
+  const { contactid, name, email, phone, whatsapp, role } = req.body
+
+  try {
+    await ContactModel.update(contactid, { name, email, phone, whatsapp, role })
+    res.status(204).send()
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
 module.exports = {
   createVendor,
   listVendor,
   findVendor,
   createContact,
   removeContact,
-  updateAddress
+  updateAddress,
+  updateContact
 }

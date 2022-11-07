@@ -25,5 +25,13 @@ module.exports = () => {
     await knex.del().from(TABLE_NAME).where({ id })
   }
 
-  return { create, find, update, remove, list }
+  const findin = async vendors => {
+    const result = await knex.select('*').from(TABLE_NAME).whereIn('idinventory_vendor', vendors)
+    console.log(result)
+    if (!result) { throw new Error('Item not found') }
+
+    return result
+  }
+
+  return { create, find, update, remove, list, findin }
 }

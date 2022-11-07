@@ -1,8 +1,10 @@
 const Item = require('../models/Item')
 const ItemTransaction = require('../models/ItemTransaction')
+const ItemHasVendor = require('../models/ItemHasVendor')
 
 const itemModel = Item()
 const itemTransactionModel = ItemTransaction()
+const itemHasVendorModel = ItemHasVendor()
 
 const listItems = async (req, res) => {
   try {
@@ -124,7 +126,6 @@ const createItemTransaction = async (req, res) => {
   const { iditem, quantity, user, memo, transdate } = req.body
   const curbal = await itemModel.getCurbal(iditem)
   const itemcurbal = parseInt(curbal[0].qtd)
-  console.log(curbal[0].qtd)
 
   if (itemcurbal + parseInt(quantity) >= 0 || curbal[0].qtd === null) {
     try {
@@ -132,12 +133,10 @@ const createItemTransaction = async (req, res) => {
       if (transaction) {
         let date = new Date()
         date = date.toJSON().replaceAll('/', '-').replaceAll('T', ' ').replaceAll('Z', '').replace('.000', '')
+        // eslint-disable-next-line no-unused-vars
         const updateItem = await itemModel.updateLastPurchase(iditem, date)
+        // eslint-disable-next-line no-unused-vars
         const updateCurbal = await itemModel.updateCurbal(iditem)
-        if (updateItem && updateCurbal) {
-          console.log(updateItem)
-          console.log(updateCurbal)
-        }
       }
       res.status(201).send({ iditem_fk: transaction[0] })
     } catch (error) {
@@ -148,6 +147,78 @@ const createItemTransaction = async (req, res) => {
   }
 }
 
+const createItemHasVendor = async (req, res) => {
+  try {
+    if (req.body.iditem && req.body.vendorid) {
+      const { iditem, vendorid } = req.body
+      const ItemHasVendor = await itemHasVendorModel.create(iditem, vendorid, { inventory_item_iditem: iditem, inventory_vendor_idinventory_vendor: vendorid })
+      console.log(ItemHasVendor)
+      // console.log(ItemHasVendor.message)
+      if (ItemHasVendor.status === 400) {
+        res.status(400).send(ItemHasVendor.message)
+      } else {
+        res.status(201).send(ItemHasVendor.message)
+      }
+    } else {
+      res.status(400).send('vendorid or iditem was not found')
+    }
+  } catch (error) {
+    res.status(400).send({ error: error.message })
+  }
+}
+
+const listItemHasVendor = async (req, res) => {
+  try {
+    if (req.body.iditem !== undefined) {
+      const iditem = req.body.iditem
+      const ItemHasVendor = await itemHasVendorModel.listByItem({ inventory_item_iditem: iditem })
+      console.log('Items' + ItemHasVendor)
+      if (ItemHasVendor) {
+        const vendors = []
+        for (let x = 0; x < ItemHasVendor.length; x++) {
+          const vendor = ItemHasVendor[x].inventory_vendor_idinventory_vendor
+          vendors.push(vendor)
+        }
+        const result = await itemModel.findInVendors(vendors)
+        res.status(200).send({ result })
+      } else {
+        res.status(404).send()
+      }
+    } else if (req.body.vendorid !== undefined) {
+      const vendorid = req.body.vendorid
+      const ItemHasVendor = await itemHasVendorModel.listByVendor({ inventory_vendor_idinventory_vendor: vendorid })
+      console.log('Vendorids' + ItemHasVendor)
+      if (ItemHasVendor) {
+        const items = []
+        for (let x = 0; x < ItemHasVendor.length; x++) {
+          const item = ItemHasVendor[x].inventory_item_iditem
+          items.push(item)
+        }
+        const result = await itemModel.findInItems(items)
+        res.status(200).send({ result })
+      } else {
+        res.status(404).send()
+      }
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
+const removeItemHasVendor = async (req, res) => {
+  try {
+    if (req.body.iditem && req.body.vendorid) {
+      const { iditem, vendorid } = req.body
+      await itemHasVendorModel.remove(iditem, vendorid)
+      res.status(204).send()
+    } else {
+      res.status(400).send('vendorid or iditem was not found')
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
 module.exports = {
   listItems,
   createItem,
@@ -155,5 +226,8 @@ module.exports = {
   updateItem,
   removeItem,
   listItemTransactions,
-  createItemTransaction
+  createItemTransaction,
+  createItemHasVendor,
+  listItemHasVendor,
+  removeItemHasVendor
 }

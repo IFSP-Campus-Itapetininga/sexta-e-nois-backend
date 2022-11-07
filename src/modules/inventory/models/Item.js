@@ -31,6 +31,7 @@ module.exports = () => {
     const curbal = await knex('inventory_item_transaction').sum('quantity as qtd').where('inventory_item_iditem', iditem)
     return curbal
   }
+
   const updateCurbal = async (iditem, lastPurchase) => {
     await find(iditem)
     const curbal = await knex('inventory_item_transaction').sum('quantity as qtd').where('inventory_item_iditem', iditem)
@@ -43,5 +44,19 @@ module.exports = () => {
     await knex(TABLE_NAME).where({ iditem }).update('active', false)
   }
 
-  return { create, find, update, remove, list, updateLastPurchase, updateCurbal, getCurbal }
+  const findInItems = async items => {
+    const result = await knex.select('*').from(TABLE_NAME).whereIn('iditem', items)
+    if (!result) { throw new Error('Item not found') }
+
+    return result
+  }
+
+  const findInVendors = async vendors => {
+    const result = await knex.select('*').from('inventory_vendor').whereIn('idinventory_vendor', vendors)
+    if (!result) { throw new Error('Vendor not found') }
+
+    return result
+  }
+
+  return { create, find, update, remove, list, updateLastPurchase, updateCurbal, getCurbal, findInItems, findInVendors }
 }
