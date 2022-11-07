@@ -1,28 +1,27 @@
+const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const User = require('../models/User')
+const User = require('../../users/models/User')
 
 const userModel = User()
 const jwtSecret = process.env.JWT_SECRET
 
 const create = async (req, res) => {
-  const { email, senha } = req.body
+  const { nome, senha } = req.body
 
   try {
-    const foundUser = await userModel.findByEmailAndPassword(email, senha)
+    const foundUser = await userModel.findByUsername(nome)
 
-    if (email === foundUser.email && senha === foundUser.senha) {
-      const token = jwt.sign({
-        userId: foundUser.id,
-        userName: foundUser.nome,
-        roleName: foundUser.nomePapel
-      }, jwtSecret)
+    if (!await bcrypt.compare(senha, foundUser.senha)) throw new Error('Wrong username or password')
 
-      res.send({ token })
-    } else {
-      res.status(401).json({ error: 'E-mail ou senha errados.' })
-    }
+    const token = jwt.sign({
+      userId: foundUser.id,
+      userName: foundUser.nome,
+      roleName: foundUser.nomePapel
+    }, jwtSecret)
+
+    res.send({ token })
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    res.status(401).json({ error: error.message })
   }
 }
 

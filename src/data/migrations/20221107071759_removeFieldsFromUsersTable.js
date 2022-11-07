@@ -4,7 +4,8 @@
  */
 exports.up = function (knex) {
   return knex.schema.alterTable('usuario', table => {
-    table.string('cpf').after('nome')
+    table.dropColumn('cpf')
+    table.dropColumn('email')
   })
 }
 
@@ -14,6 +15,7 @@ exports.up = function (knex) {
  */
 exports.down = function (knex) {
   return knex.schema.alterTable('usuario', table => {
-    table.dropColumn('cpf')
+    table.string('cpf').after('nome')
+    table.string('email').after('cpf')
   })
 }
