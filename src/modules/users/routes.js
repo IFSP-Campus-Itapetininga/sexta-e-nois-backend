@@ -8,8 +8,8 @@ const router = Router()
 
 router.post('/', authentication.verifyRole(['Administrador']), usersController.create)
 
-router.get('/', usersController.list)
-router.get('/:id', usersController.find)
+router.get('/', authentication.verifyRole(['Administrador']), usersController.list)
+router.get('/:id', authentication.verifyRole(['Administrador']), usersController.find)
 
 router.put('/:id', authentication.verifyRole(['Administrador']), usersController.update)
 
