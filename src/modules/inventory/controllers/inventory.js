@@ -133,6 +133,7 @@ const createItemTransaction = async (req, res) => {
       if (transaction) {
         let date = new Date()
         date = date.toJSON().replaceAll('/', '-').replaceAll('T', ' ').replaceAll('Z', '').replace('.000', '')
+        // let dataFormatada = date.toISOString().replace('T', ' ').replace('Z', '').slice(0, 19)
         // eslint-disable-next-line no-unused-vars
         const updateItem = await itemModel.updateLastPurchase(iditem, date)
         // eslint-disable-next-line no-unused-vars
@@ -169,7 +170,7 @@ const createItemHasVendor = async (req, res) => {
 
 const listItemHasVendor = async (req, res) => {
   try {
-    if (req.body.iditem !== undefined) {
+    if (req.params.iditem !== undefined) {
       const iditem = req.body.iditem
       const ItemHasVendor = await itemHasVendorModel.listByItem({ inventory_item_iditem: iditem })
       console.log('Items' + ItemHasVendor)
@@ -185,6 +186,28 @@ const listItemHasVendor = async (req, res) => {
         res.status(404).send()
       }
     } else if (req.body.vendorid !== undefined) {
+      const vendorid = req.body.vendorid
+      const ItemHasVendor = await itemHasVendorModel.listByVendor({ inventory_vendor_idinventory_vendor: vendorid })
+      console.log('Vendorids' + ItemHasVendor)
+      if (ItemHasVendor) {
+        const items = []
+        for (let x = 0; x < ItemHasVendor.length; x++) {
+          const item = ItemHasVendor[x].inventory_item_iditem
+          items.push(item)
+        }
+        const result = await itemModel.findInItems(items)
+        res.status(200).send({ result })
+      } else {
+        res.status(404).send()
+      }
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+const listVendorHasItem = async (req, res) => {
+  try {
+    if (req.params.vendorid !== undefined) {
       const vendorid = req.body.vendorid
       const ItemHasVendor = await itemHasVendorModel.listByVendor({ inventory_vendor_idinventory_vendor: vendorid })
       console.log('Vendorids' + ItemHasVendor)
@@ -229,5 +252,6 @@ module.exports = {
   createItemTransaction,
   createItemHasVendor,
   listItemHasVendor,
+  listVendorHasItem,
   removeItemHasVendor
 }

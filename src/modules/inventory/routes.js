@@ -17,7 +17,8 @@ router.post('/transactions/', InventoryController.createItemTransaction)
 
 // Item Has Vendor
 router.post('/item/vendor', InventoryController.createItemHasVendor)
-router.get('/item/vendor/itemhasvendor', InventoryController.listItemHasVendor)
+router.get('/item/vendor/itemhasvendor/:iditem', InventoryController.listItemHasVendor)
+router.get('/item/vendor/vendorhasitem/:vendorid', InventoryController.listVendorHasItem)
 router.delete('/item/vendor/itemhasvendor', InventoryController.removeItemHasVendor)
 
 module.exports = {
