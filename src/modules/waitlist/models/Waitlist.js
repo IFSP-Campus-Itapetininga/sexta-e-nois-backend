@@ -1,7 +1,7 @@
 const knex = require('../../../data/connection')
 
 module.exports = () => {
-  const TABLE_NAME = 'waitlist'
+  const TABLE_NAME = 'lista_espera'
 
   const create = async data => await knex.insert(data).into(TABLE_NAME)
 
@@ -9,7 +9,7 @@ module.exports = () => {
 
   const find = async id => {
     const result = await knex.select('*').from(TABLE_NAME).where({ id }).first().then(row => row)
-    if (!result) { throw new Error('Person Not found') }
+    if (!result) { throw new Error('Student Not found') }
 
     return result
   }
