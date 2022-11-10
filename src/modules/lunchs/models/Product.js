@@ -86,5 +86,5 @@ module.exports = () => {
     await knex.del().from(TABLE_NAME).where({ id })
   }
 
-  return { create, find, update, remove, list, findMany }
+  return { create, find, update, remove, list }
 }

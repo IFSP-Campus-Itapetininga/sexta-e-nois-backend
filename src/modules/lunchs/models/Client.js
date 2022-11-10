@@ -8,7 +8,11 @@ module.exports = () => {
    * @param {*} data
    * @returns
    */
-  const create = async (data) => await knex.insert(data).into(TABLE_NAME)
+  const create = async (data) =>
+    await knex
+      .insert(data)
+      .into(TABLE_NAME)
+      .then(([id]) => id)
 
   /**
    *
