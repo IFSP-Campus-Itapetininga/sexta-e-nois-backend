@@ -1,12 +1,18 @@
 const Waitlist = require('../models/Waitlist')
+const { validationCreateWaitlist } = require('../utils')
 
 const waitlistModel = Waitlist()
 
 const create = async (req, res) => {
-  const { nome, alfabetizado, escolaridade, oficina, dataNascimento, dataCadastro, nomeResponsavel, telefone } = req.body
+  const data = req.body
+  const validation = validationCreateWaitlist.validate(data)
 
+  if (validation.error) {
+    res.status(400).json({ error: validation.error.details })
+    return
+  }
   try {
-    await waitlistModel.create({ nome, alfabetizado, escolaridade, oficina, dataNascimento, dataCadastro, nomeResponsavel, telefone })
+    await waitlistModel.create(data)
 
     res.status(201).send()
   } catch (error) {
