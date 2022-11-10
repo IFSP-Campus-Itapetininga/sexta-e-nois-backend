@@ -16,9 +16,9 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const waitlists = await waitlistModel.list()
+    const waitlist = await waitlistModel.list()
 
-    res.send(waitlists)
+    res.send(waitlist)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -28,9 +28,9 @@ const find = async (req, res) => {
   const { id } = req.params
 
   try {
-    const waitlists = await waitlistModel.find(id)
+    const student = await waitlistModel.find(id)
 
-    res.send(waitlists)
+    res.send(student)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
