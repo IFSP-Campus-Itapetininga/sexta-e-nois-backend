@@ -15,6 +15,7 @@ exports.up = function (knex) {
       .references('fornecedorid')
       .inTable('fornecedor')
       .notNullable()
+      .onDelete('SET NULL')
   })
 }
 /**

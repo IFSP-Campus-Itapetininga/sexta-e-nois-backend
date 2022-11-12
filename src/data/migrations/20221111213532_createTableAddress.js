@@ -12,7 +12,12 @@ exports.up = function (knex) {
     table.string('cep').notNullable()
     table.string('bairro').notNullable()
     table.string('complemento')
-    table.integer('fornecedor_fornecedorid').unsigned().references('fornecedorid').inTable('fornecedor').notNullable()
+    table.integer('fornecedor_fornecedorid')
+      .unsigned()
+      .references('fornecedorid')
+      .inTable('fornecedor')
+      .notNullable()
+      .onDelete('SET NULL')
   })
 }
 /**
