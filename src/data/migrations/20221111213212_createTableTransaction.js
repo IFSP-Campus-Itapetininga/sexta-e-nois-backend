@@ -9,7 +9,11 @@ exports.up = function (knex) {
     table.string('usuario').notNullable()
     table.dateTime('datatransacao').nullable().defaultTo(knex.fn.now())
     table.string('memo')
-    table.integer('item_itemid').unsigned().references('itemid').inTable('item').notNullable().onDelete('SET NULL')
+    table.integer('item_itemid')
+      .unsigned()
+      .references('itemid')
+      .inTable('item')
+      .onDelete('SET NULL')
   })
 }
 /**
