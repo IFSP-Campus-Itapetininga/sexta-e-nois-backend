@@ -8,12 +8,12 @@ const ContactModel = Contact()
 
 const createContact = async (req, res) => {
   try {
-    const { name, email, phone, whatsapp, role, vendorid } = req.body
-    const vendor = await VendorModel.find(vendorid)
+    const { nome, email, telefone, whatsapp, funcao, fornecedorid } = req.body
+    const vendor = await VendorModel.find(fornecedorid)
     if (!vendor) { throw new Error('Address not found') }
-    const contact = await ContactModel.create({ name, email, phone, whatsapp, role, inventory_vendor_idinventory_vendor: vendorid })
+    const contact = await ContactModel.create({ nome, email, telefone, whatsapp, funcao, fornecedor_fornecedorid: fornecedorid })
     if (contact) {
-      res.status(201).send({ contactid: contact[0] })
+      res.status(201).send({ contatoid: contact[0] })
     } else {
       res.status(400).json({ message: 'Not created' })
     }
@@ -23,10 +23,10 @@ const createContact = async (req, res) => {
 }
 
 const removeContact = async (req, res) => {
-  const { contactid } = req.params
+  const { contatoid } = req.params
 
   try {
-    await ContactModel.remove(contactid)
+    await ContactModel.remove(contatoid)
     res.status(204).send()
   } catch (error) {
     res.status(400).json({ error: error.message })
@@ -34,36 +34,36 @@ const removeContact = async (req, res) => {
 }
 
 const createVendor = async (req, res) => {
-  const { name, description } = req.body
-  if (req.body.address && req.body.contact) {
-    const { street, number, state, city, zipCode, district, complement } = req.body.address
+  const { fornecedor, descricao, cnpj } = req.body
+  if (req.body.endereco && req.body.contato) {
+    const { rua, numero, estado, cidade, cep, bairro, complemento } = req.body.endereco
     try {
-      const vendor = await VendorModel.create({ vendor: name, description })
+      const vendor = await VendorModel.create({ fornecedor, descricao, cnpj })
       if (vendor) {
-        const address = await AddressModel.create({ street, number, state, city, zipCode, district, complement, inventory_vendor_idinventory_vendor: vendor[0] })
+        const address = await AddressModel.create({ rua, numero, estado, cidade, cep, bairro, complemento, fornecedor_fornecedorid: vendor[0] })
 
         const contactids = []
-        const contactList = req.body.contact
+        const contactList = req.body.contato
         const tamanho = contactList.length
         for (let x = 0; x < tamanho; x++) {
-          const contactName = req.body.contact[x].name
+          const contactName = req.body.contato[x].nome
           const element = contactList[x]
           console.log(element)
-          const { email, phone, whatsapp, role } = req.body.contact[x]
-          const contact = await ContactModel.create({ name: contactName, email, phone, whatsapp, role, inventory_vendor_idinventory_vendor: vendor[0] })
+          const { email, telefone, whatsapp, funcao } = req.body.contato[x]
+          const contact = await ContactModel.create({ nome: contactName, email, telefone, whatsapp, funcao, fornecedor_fornecedorid: vendor[0] })
           contactids.push(contact[0])
         }
-        res.status(201).send({ vendor: vendor[0], address: address[0], contact: contactids })
+        res.status(201).send({ fornecedor: vendor[0], endereco: address[0], contato: contactids })
       } else {
-        res.status(201).send({ vendor: vendor[0] })
+        res.status(201).send({ fornecedor: vendor[0] })
       }
     } catch (error) {
       res.status(400).json({ error: error.message })
     }
   } else {
     try {
-      const vendor = await VendorModel.create({ vendor: name, description })
-      res.status(201).send({ vendor: vendor[0] })
+      const vendor = await VendorModel.create({ fornecedor, descricao, cnpj })
+      res.status(201).send({ fornecedor: vendor[0] })
     } catch (error) {
       res.status(400).json({ error: error.message })
     }
@@ -82,20 +82,21 @@ const listVendor = async (req, res) => {
 
 const findVendor = async (req, res) => {
   try {
-    const vendorid = req.params.vendorid
-    let vendor = await VendorModel.find(vendorid)
-    const address = await AddressModel.listByVendor(vendorid)
-    const contact = await ContactModel.listByVendor(vendorid)
+    const fornecedorid = req.params.fornecedorid
+    let vendor = await VendorModel.find(fornecedorid)
+    const address = await AddressModel.listByVendor(fornecedorid)
+    const contact = await ContactModel.listByVendor(fornecedorid)
     vendor = [vendor]
     const response = {
       vendor: vendor.map(function (vendor) {
         return {
-          vendor: vendor.vendor,
-          description: vendor.description,
+          fornecedor: vendor.fornecedor,
+          descricao: vendor.descricao,
+          cnpj: vendor.cnpj,
           // eslint-disable-next-line object-shorthand
-          contact: contact,
+          contato: contact,
           // eslint-disable-next-line object-shorthand
-          address: address
+          endereco: address
         }
       })
     }
@@ -108,10 +109,10 @@ const findVendor = async (req, res) => {
 }
 
 const updateAddress = async (req, res) => {
-  const { addressid, street, number, state, city, zipCode, district, complement } = req.body
+  const { enderecoid, rua, numero, estado, cidade, cep, bairro, complemento } = req.body
 
   try {
-    await AddressModel.update(addressid, { street, number, state, city, zipCode, district, complement })
+    await AddressModel.update(enderecoid, { rua, numero, estado, cidade, cep, bairro, complemento })
     res.status(204).send()
   } catch (error) {
     res.status(400).json({ error: error.message })
@@ -119,10 +120,10 @@ const updateAddress = async (req, res) => {
 }
 
 const updateContact = async (req, res) => {
-  const { contactid, name, email, phone, whatsapp, role } = req.body
+  const { contatoid, nome, email, telefone, whatsapp, funcao } = req.body
 
   try {
-    await ContactModel.update(contactid, { name, email, phone, whatsapp, role })
+    await ContactModel.update(contatoid, { nome, email, telefone, whatsapp, funcao })
     res.status(204).send()
   } catch (error) {
     res.status(400).json({ error: error.message })

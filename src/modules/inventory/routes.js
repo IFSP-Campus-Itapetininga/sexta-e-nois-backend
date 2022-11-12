@@ -6,19 +6,19 @@ const router = Router()
 
 // items
 router.get('/item/', InventoryController.listItems)
-router.get('/item/:iditem', InventoryController.findItem)
+router.get('/item/:itemid', InventoryController.findItem)
 router.post('/item/', InventoryController.createItem)
-router.delete('/item/:iditem', InventoryController.removeItem)
-router.patch('/item/:iditem', InventoryController.updateItem)
+router.delete('/item/:itemid', InventoryController.removeItem)
+router.patch('/item/:itemid', InventoryController.updateItem)
 
 // transactions
-router.get('/transactions/:iditem', InventoryController.listItemTransactions)
+router.get('/transactions/:itemid', InventoryController.listItemTransactions)
 router.post('/transactions/', InventoryController.createItemTransaction)
 
 // Item Has Vendor
 router.post('/item/vendor', InventoryController.createItemHasVendor)
-router.get('/item/vendor/itemhasvendor/:iditem', InventoryController.listItemHasVendor)
-router.get('/item/vendor/vendorhasitem/:vendorid', InventoryController.listVendorHasItem)
+router.get('/item/vendor/itemhasvendor/:itemid', InventoryController.listItemHasVendor)
+router.get('/item/vendor/vendorhasitem/:fornecedorid', InventoryController.listVendorHasItem)
 router.delete('/item/vendor/itemhasvendor', InventoryController.removeItemHasVendor)
 
 module.exports = {

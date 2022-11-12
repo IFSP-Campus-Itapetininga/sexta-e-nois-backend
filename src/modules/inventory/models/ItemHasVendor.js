@@ -2,10 +2,10 @@
 const knex = require('../../../data/connection')
 
 module.exports = () => {
-  const TABLE_NAME = 'inventory_item_has_inventory_vendor'
+  const TABLE_NAME = 'item_has_fornecedor'
 
-  const create = async (iditem, vendorid, data) => {
-    const exist = await find(iditem, vendorid)
+  const create = async (itemid, fornecedorid, data) => {
+    const exist = await find(itemid, fornecedorid)
     if (!exist) {
       const result = await knex.insert(data).into(TABLE_NAME)
       const response = {
@@ -23,33 +23,33 @@ module.exports = () => {
     }
   }
 
-  const listByItem = async inventory_item_iditem => {
-    const result = await knex.select('*').from(TABLE_NAME).where(inventory_item_iditem)
+  const listByItem = async item_itemid => {
+    const result = await knex.select('*').from(TABLE_NAME).where(item_itemid)
     console.log(result)
     if (!result) { throw new Error('Item not found') }
 
     return result
   }
 
-  const listByVendor = async inventory_vendor_idinventory_vendor => {
-    const result = await knex.select('*').from(TABLE_NAME).where(inventory_vendor_idinventory_vendor)
+  const listByVendor = async fornecedor_fornecedorid => {
+    const result = await knex.select('*').from(TABLE_NAME).where(fornecedor_fornecedorid)
     // console.log(result)
     if (!result) { throw new Error('Vendor not found') }
 
     return result
   }
 
-  const find = async (iditem, vendorid) => {
-    const result = await knex.select('*').from(TABLE_NAME).where({ inventory_item_iditem: iditem, inventory_vendor_idinventory_vendor: vendorid }).first().then(row => row)
+  const find = async (itemid, fornecedorid) => {
+    const result = await knex.select('*').from(TABLE_NAME).where({ item_itemid: itemid, fornecedor_fornecedorid: fornecedorid }).first().then(row => row)
     // if (!result) { throw new Error('ItemHasVendor not found') }
 
     return result
   }
 
-  const remove = async (iditem, vendorid) => {
-    await find(iditem, vendorid)
+  const remove = async (itemid, fornecedorid) => {
+    await find(itemid, fornecedorid)
 
-    await knex.del().from(TABLE_NAME).where({ inventory_item_iditem: iditem, inventory_vendor_idinventory_vendor: vendorid })
+    await knex.del().from(TABLE_NAME).where({ item_itemid: itemid, fornecedor_fornecedorid: fornecedorid })
   }
 
   return {

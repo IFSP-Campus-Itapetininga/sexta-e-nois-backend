@@ -1,36 +1,36 @@
 const knex = require('../../../data/connection')
 
 module.exports = () => {
-  const TABLE_NAME = 'inventory_address'
+  const TABLE_NAME = 'endereco'
 
   const create = async data => await knex.insert(data).into(TABLE_NAME)
 
   const list = async () => await knex.select('*').from(TABLE_NAME)
 
-  const listByVendor = async vendorid => {
-    const result = await knex.select('*').from(TABLE_NAME).where({ inventory_vendor_idinventory_vendor: vendorid })
+  const listByVendor = async fornecedorid => {
+    const result = await knex.select('*').from(TABLE_NAME).where({ fornecedor_fornecedorid: fornecedorid })
     if (!result) { throw new Error('Address not found') }
 
     return result
   }
 
-  const find = async addressid => {
-    const result = await knex.select('*').from(TABLE_NAME).where({ idinventory_address: addressid }).first().then(row => row)
+  const find = async enderecoid => {
+    const result = await knex.select('*').from(TABLE_NAME).where({ enderecoid }).first().then(row => row)
     if (!result) { throw new Error('Address not found') }
 
     return result
   }
 
-  const update = async (addressid, data) => {
-    await find(addressid)
+  const update = async (enderecoid, data) => {
+    await find(enderecoid)
 
-    await knex.update(data).from(TABLE_NAME).where({ idinventory_address: addressid })
+    await knex.update(data).from(TABLE_NAME).where({ enderecoid })
   }
 
-  const remove = async addressid => {
-    await find(addressid)
+  const remove = async enderecoid => {
+    await find(enderecoid)
 
-    await knex.del().from(TABLE_NAME).where({ idinventory_address: addressid })
+    await knex.del().from(TABLE_NAME).where({ enderecoid })
   }
 
   return { create, find, update, remove, list, listByVendor }

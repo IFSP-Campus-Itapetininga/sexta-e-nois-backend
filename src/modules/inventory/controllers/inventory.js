@@ -12,11 +12,10 @@ const listItems = async (req, res) => {
     const response = {
       items: items.map(function (item) {
         return {
-          iditem: item.iditem,
-          description: item.description,
-          active: item.active,
-          curbal: item.curbal,
-          lastPurchase: item.lastPurchase.toJSON().replaceAll('/', '-').replaceAll('T', ' ').replaceAll('Z', '').replace('.000', '')
+          itemid: item.itemid,
+          descricao: item.descricao,
+          ativo: item.ativo,
+          saldo: parseInt(item.saldo)
         }
       })
     }
@@ -27,19 +26,18 @@ const listItems = async (req, res) => {
 }
 
 const findItem = async (req, res) => {
-  const { iditem } = req.params
+  const { itemid } = req.params
 
   try {
-    let item = await itemModel.find(iditem)
+    let item = await itemModel.find(itemid)
     item = [item]
     const response = {
       item: item.map(function (item) {
         return {
-          iditem: item.iditem,
-          description: item.description,
-          active: item.active,
-          curbal: item.curbal,
-          lastPurchase: item.lastPurchase.toJSON().replaceAll('/', '-').replaceAll('T', ' ').replaceAll('Z', '').replace('.000', '')
+          itemid: item.itemid,
+          descricao: item.descricao,
+          ativo: item.ativo,
+          saldo: parseInt(item.saldo)
         }
       })
     }
@@ -51,23 +49,23 @@ const findItem = async (req, res) => {
 }
 
 const createItem = async (req, res) => {
-  const { description, active, curbal, lastPurchase } = req.body
+  const { descricao, ativo, saldo } = req.body
 
   try {
-    const item = await itemModel.create({ description, active, curbal, lastPurchase })
+    const item = await itemModel.create({ descricao, ativo, saldo })
 
-    res.status(201).send({ iditem: item[0] })
+    res.status(201).send({ itemid: item[0] })
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
 }
 
 const updateItem = async (req, res) => {
-  const { iditem } = req.params
-  const { description, active, curbal, lastPurchase } = req.body
+  const { itemid } = req.params
+  const { descricao, ativo, saldo } = req.body
 
   try {
-    await itemModel.update(iditem, { description, active, curbal, lastPurchase })
+    await itemModel.update(itemid, { descricao, ativo, saldo })
 
     res.status(204).send()
   } catch (error) {
@@ -76,9 +74,9 @@ const updateItem = async (req, res) => {
 }
 
 const removeItem = async (req, res) => {
-  const { iditem } = req.params
+  const { itemid } = req.params
   try {
-    await itemModel.remove(iditem)
+    await itemModel.remove(itemid)
     res.status(204).send()
   } catch (error) {
     res.status(400).json({ error: error.message })
@@ -86,32 +84,31 @@ const removeItem = async (req, res) => {
 }
 
 const listItemTransactions = async (req, res) => {
-  const { iditem } = req.params
+  const { itemid } = req.params
   try {
-    let item = await itemModel.find(iditem)
+    let item = await itemModel.find(itemid)
     item = [item]
-    const transactions = await itemTransactionModel.list(iditem)
+    const transactions = await itemTransactionModel.list(itemid)
     const responseTransaction = {
       transactions: transactions.map(function (transaction) {
         return {
-          idinventory_item_transaction: transaction.idinventory_item_transaction,
-          quantity: parseInt(transaction.quantity),
-          user: transaction.user,
+          transacaoid: transaction.transacaoid,
+          item_itemid: transaction.item_itemid,
+          quantidade: parseInt(transaction.quantidade),
+          usuario: transaction.usuario,
           memo: transaction.memo,
-          transdate: transaction.transdate.toJSON().replaceAll('/', '-').replaceAll('T', ' ').replaceAll('Z', '').replace('.000', ''),
-          inventory_item_iditem: transaction.inventory_item_iditem
+          datatransacao: transaction.datatransacao
         }
       })
     }
     let responseItem = {
       item: item.map(function (item) {
         return {
-          iditem: item.iditem,
-          description: item.description,
-          curbal: parseInt(item.curbal),
-          active: item.active,
-          lastPurchase: item.lastPurchase.toJSON().replaceAll('/', '-').replaceAll('T', ' ').replaceAll('Z', '').replace('.000', ''),
-          transactions: responseTransaction.transactions
+          itemid: item.itemid,
+          descricao: item.descricao,
+          saldo: parseInt(item.saldo),
+          ativo: item.ativo,
+          transacoes: responseTransaction.transactions
         }
       })
     }
@@ -123,23 +120,18 @@ const listItemTransactions = async (req, res) => {
 }
 
 const createItemTransaction = async (req, res) => {
-  const { iditem, quantity, user, memo, transdate } = req.body
-  const curbal = await itemModel.getCurbal(iditem)
+  const { itemid, quantidade, usuario, memo, datatransacao } = req.body
+  const curbal = await itemModel.getCurbal(itemid)
   const itemcurbal = parseInt(curbal[0].qtd)
 
-  if (itemcurbal + parseInt(quantity) >= 0 || curbal[0].qtd === null) {
+  if (itemcurbal + parseInt(quantidade) >= 0 || curbal[0].qtd === null) {
     try {
-      const transaction = await itemTransactionModel.create({ inventory_item_iditem: iditem, quantity, user, memo, transdate })
+      const transaction = await itemTransactionModel.create({ item_itemid: itemid, quantidade, usuario, memo, datatransacao })
       if (transaction) {
-        let date = new Date()
-        date = date.toJSON().replaceAll('/', '-').replaceAll('T', ' ').replaceAll('Z', '').replace('.000', '')
-        // let dataFormatada = date.toISOString().replace('T', ' ').replace('Z', '').slice(0, 19)
         // eslint-disable-next-line no-unused-vars
-        const updateItem = await itemModel.updateLastPurchase(iditem, date)
-        // eslint-disable-next-line no-unused-vars
-        const updateCurbal = await itemModel.updateCurbal(iditem)
+        const updateCurbal = await itemModel.updateCurbal(itemid)
       }
-      res.status(201).send({ iditem_fk: transaction[0] })
+      res.status(201).send({ transacaoid: transaction[0] })
     } catch (error) {
       res.status(400).json({ error: error.message })
     }
@@ -150,18 +142,16 @@ const createItemTransaction = async (req, res) => {
 
 const createItemHasVendor = async (req, res) => {
   try {
-    if (req.body.iditem && req.body.vendorid) {
-      const { iditem, vendorid } = req.body
-      const ItemHasVendor = await itemHasVendorModel.create(iditem, vendorid, { inventory_item_iditem: iditem, inventory_vendor_idinventory_vendor: vendorid })
-      console.log(ItemHasVendor)
-      // console.log(ItemHasVendor.message)
+    if (req.body.itemid && req.body.fornecedorid) {
+      const { itemid, fornecedorid } = req.body
+      const ItemHasVendor = await itemHasVendorModel.create(itemid, fornecedorid, { item_itemid: itemid, fornecedor_fornecedorid: fornecedorid })
       if (ItemHasVendor.status === 400) {
         res.status(400).send(ItemHasVendor.message)
       } else {
         res.status(201).send(ItemHasVendor.message)
       }
     } else {
-      res.status(400).send('vendorid or iditem was not found')
+      res.status(400).send('fornecedorid or iditem was not found')
     }
   } catch (error) {
     res.status(400).send({ error: error.message })
@@ -170,14 +160,14 @@ const createItemHasVendor = async (req, res) => {
 
 const listItemHasVendor = async (req, res) => {
   try {
-    if (req.params.iditem !== undefined) {
-      const iditem = req.body.iditem
-      const ItemHasVendor = await itemHasVendorModel.listByItem({ inventory_item_iditem: iditem })
+    if (req.params.itemid !== undefined) {
+      const itemid = req.params.itemid
+      const ItemHasVendor = await itemHasVendorModel.listByItem({ item_itemid: itemid })
       console.log('Items' + ItemHasVendor)
       if (ItemHasVendor) {
         const vendors = []
         for (let x = 0; x < ItemHasVendor.length; x++) {
-          const vendor = ItemHasVendor[x].inventory_vendor_idinventory_vendor
+          const vendor = ItemHasVendor[x].item_itemid
           vendors.push(vendor)
         }
         const result = await itemModel.findInVendors(vendors)
@@ -185,21 +175,8 @@ const listItemHasVendor = async (req, res) => {
       } else {
         res.status(404).send()
       }
-    } else if (req.body.vendorid !== undefined) {
-      const vendorid = req.body.vendorid
-      const ItemHasVendor = await itemHasVendorModel.listByVendor({ inventory_vendor_idinventory_vendor: vendorid })
-      console.log('Vendorids' + ItemHasVendor)
-      if (ItemHasVendor) {
-        const items = []
-        for (let x = 0; x < ItemHasVendor.length; x++) {
-          const item = ItemHasVendor[x].inventory_item_iditem
-          items.push(item)
-        }
-        const result = await itemModel.findInItems(items)
-        res.status(200).send({ result })
-      } else {
-        res.status(404).send()
-      }
+    } else {
+      res.status(400).json({ message: 'itemid not found' })
     }
   } catch (error) {
     res.status(400).json({ error: error.message })
@@ -207,14 +184,13 @@ const listItemHasVendor = async (req, res) => {
 }
 const listVendorHasItem = async (req, res) => {
   try {
-    if (req.params.vendorid !== undefined) {
-      const vendorid = req.body.vendorid
-      const ItemHasVendor = await itemHasVendorModel.listByVendor({ inventory_vendor_idinventory_vendor: vendorid })
-      console.log('Vendorids' + ItemHasVendor)
+    if (req.params.fornecedorid !== undefined) {
+      const fornecedorid = req.params.fornecedorid
+      const ItemHasVendor = await itemHasVendorModel.listByVendor({ fornecedor_fornecedorid: fornecedorid })
       if (ItemHasVendor) {
         const items = []
         for (let x = 0; x < ItemHasVendor.length; x++) {
-          const item = ItemHasVendor[x].inventory_item_iditem
+          const item = ItemHasVendor[x].item_itemid
           items.push(item)
         }
         const result = await itemModel.findInItems(items)
@@ -230,12 +206,12 @@ const listVendorHasItem = async (req, res) => {
 
 const removeItemHasVendor = async (req, res) => {
   try {
-    if (req.body.iditem && req.body.vendorid) {
-      const { iditem, vendorid } = req.body
-      await itemHasVendorModel.remove(iditem, vendorid)
+    if (req.body.itemid && req.body.fornecedorid) {
+      const { itemid, fornecedorid } = req.body
+      await itemHasVendorModel.remove(itemid, fornecedorid)
       res.status(204).send()
     } else {
-      res.status(400).send('vendorid or iditem was not found')
+      res.status(400).send('fornecedorid or iditem was not found')
     }
   } catch (error) {
     res.status(400).json({ error: error.message })

@@ -6,13 +6,13 @@ const router = Router()
 
 router.post('/', vendorController.createVendor)
 router.get('/', vendorController.listVendor)
-router.get('/:vendorid', vendorController.findVendor)
+router.get('/:fornecedorid', vendorController.findVendor)
 
 router.post('/contact/', vendorController.createContact)
 router.patch('/contact/', vendorController.updateContact)
-router.delete('/contact/:contactid', vendorController.removeContact)
+router.delete('/contact/:contatoid', vendorController.removeContact)
 
-router.patch('/address/', vendorController.updateAddress)
+router.patch('/address', vendorController.updateAddress)
 
 module.exports = {
   ROUTES_PREFIX,

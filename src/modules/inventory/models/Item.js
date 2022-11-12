@@ -1,62 +1,56 @@
 const knex = require('../../../data/connection')
 
 module.exports = () => {
-  const TABLE_NAME = 'inventory_item'
+  const TABLE_NAME = 'item'
 
   const create = async data => await knex.insert(data).into(TABLE_NAME)
 
   const list = async () => await knex.select('*').from(TABLE_NAME)
 
-  const find = async iditem => {
-    const result = await knex.select('*').from(TABLE_NAME).where({ iditem }).first().then(row => row)
+  const find = async itemid => {
+    const result = await knex.select('*').from(TABLE_NAME).where({ itemid }).first().then(row => row)
     if (!result) { throw new Error('Item not found') }
 
     return result
   }
 
-  const update = async (iditem, data) => {
-    await find(iditem)
+  const update = async (itemid, data) => {
+    await find(itemid)
 
-    await knex.update(data).from(TABLE_NAME).where({ iditem })
+    await knex.update(data).from(TABLE_NAME).where({ itemid })
   }
 
-  const updateLastPurchase = async (iditem, lastPurchase) => {
-    await find(iditem)
-
-    await knex(TABLE_NAME).where({ iditem }).update({ lastPurchase })
-  }
-
-  const getCurbal = async (iditem) => {
-    await find(iditem)
-    const curbal = await knex('inventory_item_transaction').sum('quantity as qtd').where('inventory_item_iditem', iditem)
+  const getCurbal = async (itemid) => {
+    await find(itemid)
+    const curbal = await knex('transacao').sum('quantidade as qtd').where('item_itemid', itemid)
     return curbal
   }
 
-  const updateCurbal = async (iditem, lastPurchase) => {
-    await find(iditem)
-    const curbal = await knex('inventory_item_transaction').sum('quantity as qtd').where('inventory_item_iditem', iditem)
+  const updateCurbal = async (itemid) => {
+    await find(itemid)
+    const curbal = await knex('transacao').sum('quantidade as qtd').where('item_itemid', itemid)
     console.log(parseInt(curbal[0].qtd))
-    await knex(TABLE_NAME).where({ iditem }).update({ curbal: curbal[0].qtd })
+    await knex(TABLE_NAME).where({ itemid }).update({ saldo: curbal[0].qtd })
   }
 
-  const remove = async iditem => {
-    await find(iditem)
-    await knex(TABLE_NAME).where({ iditem }).update('active', false)
+  const remove = async itemid => {
+    await find(itemid)
+    await knex(TABLE_NAME).where({ itemid }).update('ativo', false)
   }
 
   const findInItems = async items => {
-    const result = await knex.select('*').from(TABLE_NAME).whereIn('iditem', items)
+    const result = await knex.select('*').from(TABLE_NAME).whereIn('itemid', items)
     if (!result) { throw new Error('Item not found') }
 
     return result
   }
 
   const findInVendors = async vendors => {
-    const result = await knex.select('*').from('inventory_vendor').whereIn('idinventory_vendor', vendors)
+    const result = await knex.select('*').from('fornecedor').whereIn('fornecedorid', vendors)
     if (!result) { throw new Error('Vendor not found') }
 
     return result
   }
 
-  return { create, find, update, remove, list, updateLastPurchase, updateCurbal, getCurbal, findInItems, findInVendors }
+  return { create, find, update, remove, list, updateCurbal, getCurbal, findInItems, findInVendors }
 }
