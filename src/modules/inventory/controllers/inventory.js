@@ -163,11 +163,10 @@ const listItemHasVendor = async (req, res) => {
     if (req.params.itemid !== undefined) {
       const itemid = req.params.itemid
       const ItemHasVendor = await itemHasVendorModel.listByItem({ item_itemid: itemid })
-      console.log('Items' + ItemHasVendor)
       if (ItemHasVendor) {
         const vendors = []
         for (let x = 0; x < ItemHasVendor.length; x++) {
-          const vendor = ItemHasVendor[x].item_itemid
+          const vendor = ItemHasVendor[x].fornecedor_fornecedorid
           vendors.push(vendor)
         }
         const result = await itemModel.findInVendors(vendors)
@@ -194,7 +193,17 @@ const listVendorHasItem = async (req, res) => {
           items.push(item)
         }
         const result = await itemModel.findInItems(items)
-        res.status(200).send({ result })
+        const response = {
+          item: result.map(function (item) {
+            return {
+              itemid: item.itemid,
+              descricao: item.descricao,
+              saldo: parseInt(item.saldo),
+              ativo: item.ativo
+            }
+          })
+        }
+        res.status(200).send({ response })
       } else {
         res.status(404).send()
       }

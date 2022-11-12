@@ -29,7 +29,6 @@ module.exports = () => {
   const updateCurbal = async (itemid) => {
     await find(itemid)
     const curbal = await knex('transacao').sum('quantidade as qtd').where('item_itemid', itemid)
-    console.log(parseInt(curbal[0].qtd))
     await knex(TABLE_NAME).where({ itemid }).update({ saldo: curbal[0].qtd })
   }
 

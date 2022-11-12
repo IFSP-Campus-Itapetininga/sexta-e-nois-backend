@@ -25,7 +25,6 @@ module.exports = () => {
 
   const listByItem = async item_itemid => {
     const result = await knex.select('*').from(TABLE_NAME).where(item_itemid)
-    console.log(result)
     if (!result) { throw new Error('Item not found') }
 
     return result
@@ -33,7 +32,6 @@ module.exports = () => {
 
   const listByVendor = async fornecedor_fornecedorid => {
     const result = await knex.select('*').from(TABLE_NAME).where(fornecedor_fornecedorid)
-    // console.log(result)
     if (!result) { throw new Error('Vendor not found') }
 
     return result
