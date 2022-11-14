@@ -14,7 +14,7 @@ app.use(express.json())
 app.use('/v1', routes)
 
 app.use((err, req, res, next) => {
-  res.status(400).send({ error: err.message })
+  res.status(500).send({ error: err.message })
 })
 
 module.exports = {
