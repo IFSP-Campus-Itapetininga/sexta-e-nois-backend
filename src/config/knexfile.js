@@ -16,7 +16,7 @@ module.exports = {
     migrations: {
       directory: '../data/migrations'
     },
-    debug: process.env.NODE_ENV === "development"
+    debug: process.env.NODE_ENV === 'development'
   }
 
   // production: {

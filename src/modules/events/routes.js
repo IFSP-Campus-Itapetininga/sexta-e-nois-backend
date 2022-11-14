@@ -6,14 +6,14 @@ const authentication = require('../../utils/middlewares/authentication')
 const ROUTES_PREFIX = '/events'
 const router = Router()
 
-router.post('/', authentication.verifyRole(['Administrador', 'Organizador']), eventsController.create)
+router.post('/', authentication.verifyRole(['Administrador', 'Resp. Evento']), eventsController.create)
 
 router.get('/', eventsController.list)
 router.get('/:id', eventsController.find)
 
-router.put('/:id', authentication.verifyRole(['Administrador', 'Organizador']), eventsController.update)
+router.put('/:id', authentication.verifyRole(['Administrador', 'Resp. Evento']), eventsController.update)
 
-router.delete('/:id', authentication.verifyRole(['Administrador', 'Organizador']), eventsController.remove)
+router.delete('/:id', authentication.verifyRole(['Administrador', 'Resp. Evento']), eventsController.remove)
 
 module.exports = {
   ROUTES_PREFIX,
