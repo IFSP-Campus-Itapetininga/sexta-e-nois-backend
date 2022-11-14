@@ -14,9 +14,13 @@ const login= async (req, res) => {
     if (!await bcrypt.compare(senha, foundUser.senha)) throw new Error('Wrong username or password')
 
     const token = jwt.sign({
-      userId: foundUser.id,
-      userName: foundUser.nome,
-      roleName: foundUser.nomePapel
+      user: {
+            id: foundUser.id,
+            name: foundUser.nome,
+      },
+      role: {
+            name: foundUser.nomePapel
+      }
     }, jwtSecret)
 
     res.send({ token })
