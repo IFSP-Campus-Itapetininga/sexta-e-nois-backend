@@ -5,7 +5,7 @@ const User = require('../../users/models/User')
 const userModel = User()
 const jwtSecret = process.env.JWT_SECRET
 
-const create = async (req, res) => {
+const login= async (req, res) => {
   const { nome, senha } = req.body
 
   try {
