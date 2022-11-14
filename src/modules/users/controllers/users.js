@@ -35,7 +35,7 @@ const find = async (req, res) => {
   const { id } = req.params
 
   try {
-    const event = await userModel.find(id)
+    const user = await userModel.find(id)
 
     res.send(event)
   } catch (error) {
