@@ -13,9 +13,9 @@ const create = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(senha, 10)
 
-    const userId = await userModel.create({ nome: username, senha: hashPassword, idPapel })
+    const userId = await userModel.create({ username, senha: hashPassword, idPapel, nome })
 
-    res.status(200).send({ id: userId, nome: username })
+    res.status(200).send({ id: userId, username, nome })
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
