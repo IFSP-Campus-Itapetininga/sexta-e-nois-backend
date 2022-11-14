@@ -13,9 +13,9 @@ const create = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(senha, 10)
 
-    const userId = await userModel.create({ nome: username, senha: hashPassword, idPapel })
+    const userId = await userModel.create({ nome, nomeUsuario: username, senha: hashPassword, idPapel })
 
-    res.status(200).send({ id: userId, nome: username })
+    res.status(200).send({ id: userId, nome, nomeUsuario: username })
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -23,11 +23,11 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const events = await userModel.list()
+    const users = await userModel.list()
 
-    res.send(events)
+    res.send(users)
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    res.status(500).json({ error: error.message })
   }
 }
 
@@ -35,9 +35,9 @@ const find = async (req, res) => {
   const { id } = req.params
 
   try {
-    const event = await userModel.findById(id)
+    const user = await userModel.find(id)
 
-    res.send(event)
+    res.send(user)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }

@@ -5,18 +5,24 @@ const User = require('../../users/models/User')
 const userModel = User()
 const jwtSecret = process.env.JWT_SECRET
 
-const create = async (req, res) => {
-  const { nome, senha } = req.body
+const login = async (req, res) => {
+  const { nomeUsuario, senha } = req.body
 
   try {
-    const foundUser = await userModel.findByUsername(nome)
+    const foundUser = await userModel.findByUsername(nomeUsuario)
 
     if (!await bcrypt.compare(senha, foundUser.senha)) throw new Error('Wrong username or password')
 
     const token = jwt.sign({
-      userId: foundUser.id,
-      userName: foundUser.nome,
-      roleName: foundUser.nomePapel
+      user: {
+        id: foundUser.id,
+        name: foundUser.nome,
+        username: foundUser.nomeUsuario
+
+      },
+      role: {
+        name: foundUser.nomePapel
+      }
     }, jwtSecret)
 
     res.send({ token })
@@ -25,4 +31,4 @@ const create = async (req, res) => {
   }
 }
 
-module.exports = { create }
+module.exports = { login }

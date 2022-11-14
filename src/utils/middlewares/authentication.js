@@ -9,14 +9,13 @@ class Authentication {
 
       const [, token] = header.split(' ')
 
-      const { userId, userName, roleName } = jwt.verify(token, jwtSecret)
+      const { user, role } = jwt.verify(token, jwtSecret)
 
-      if (!userId || !userName || !roleName) throw new Error('Invalid token')
+      if (!user.id || !user.name || !user.username || !role.name) throw new Error('Invalid token')
 
       const extractedData = {
-        userId,
-        userName,
-        roleName
+        user,
+        role
       }
 
       return extractedData
@@ -30,7 +29,7 @@ class Authentication {
       try {
         const tokenData = this.validateAndExtractDataFromToken(req.headers.authorization)
 
-        if (!roles.includes(tokenData.roleName)) throw new Error('Unauthorized role. The following roles are permitted: ' + roles.toString())
+        if (!roles.includes(tokenData.role.name)) throw new Error('Unauthorized role. The following roles are permitted: ' + roles.toString())
 
         req.user = tokenData
 

@@ -16,10 +16,7 @@ module.exports = {
     migrations: {
       directory: '../data/migrations'
     },
-    seeds: {
-      directory: '../data/seeds'
-    },
-    debug: true
+    debug: process.env.NODE_ENV === 'development'
   }
 
   // production: {
