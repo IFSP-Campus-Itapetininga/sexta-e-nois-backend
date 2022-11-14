@@ -23,7 +23,7 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const events = await userModel.list()
+    const users = await userModel.list()
 
     res.send(events)
   } catch (error) {
