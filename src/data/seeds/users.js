@@ -9,6 +9,7 @@ exports.seed = async function (knex) {
     {
       id: 1,
       nome: 'Administrador',
+      nomeUsuario: 'admin001',
       senha: process.env.ADMIN_PASSWORD,
       idPapel: 1
     }

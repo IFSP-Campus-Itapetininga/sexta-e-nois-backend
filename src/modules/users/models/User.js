@@ -22,7 +22,7 @@ module.exports = () => {
   }
 
   const findById = async id => {
-    const result = await knex.select('id', 'nome', 'idPapel', 'criadoEm', 'alteradoEm').from(TABLE_NAME).where({ id }).first().then(row => row)
+    const result = await knex.select('id', 'nome', 'nomeUsuario', 'idPapel', 'criadoEm', 'alteradoEm').from(TABLE_NAME).where({ id }).first().then(row => row)
     if (!result) { throw new Error('User not found') }
 
     return result
