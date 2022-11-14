@@ -8,8 +8,8 @@ exports.seed = async function (knex) {
   await knex('usuario').insert([
     {
       id: 1,
-      nome: 'admin001',
-      senha: '$2a$12$FM1lVPdMgQzYmPu8T8oqIebElMhz2TwiCYzO5z24RM20bMccT6gTu', // password = 123; NÃO USAR este usuário em produção; apenas para testes; apagar este arquivo ao final do projeto.
+      nome: 'Administrador',
+      senha: process.env.ADMIN_PASSWORD,
       idPapel: 1
     }
   ])
