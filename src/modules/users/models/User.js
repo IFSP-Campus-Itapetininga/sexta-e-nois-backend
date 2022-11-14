@@ -8,7 +8,7 @@ module.exports = () => {
   const list = async (page = 0, limit = 10) => {
     const [count, data] = await Promise.all([
       knex.from(TABLE_NAME).count(),
-      knex.select('id', 'nome', 'idPapel', 'criadoEm', 'alteradoEm').from(TABLE_NAME).offset(page).limit(limit)
+      knex.select('id', 'nome', 'nomeUsuario', 'idPapel', 'criadoEm', 'alteradoEm').from(TABLE_NAME).offset(page).limit(limit)
     ])
 
     const quantity = count[0]['count(*)']
@@ -28,11 +28,12 @@ module.exports = () => {
     return result
   }
 
-  const findByUsername = async (nome) => {
+  const findByUsername = async (username) => {
     const result = await knex
       .select(
       `${TABLE_NAME}.id`,
       `${TABLE_NAME}.nome`,
+      `${TABLE_NAME}.nomeUsuario`,
       `${TABLE_NAME}.senha`,
       `${TABLE_NAME}.idPapel`,
       'papel.nome as nomePapel'
@@ -43,7 +44,7 @@ module.exports = () => {
       `${TABLE_NAME}.idPapel`,
       'papel.id'
       )
-      .where({ 'usuario.nome': nome })
+      .where({ 'usuario.nomeUsuario': username })
       .first()
       .then(row => row)
     if (!result) { throw new Error('User not found') }
