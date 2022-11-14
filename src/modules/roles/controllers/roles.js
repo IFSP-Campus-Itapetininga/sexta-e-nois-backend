@@ -8,7 +8,7 @@ const list = async (req, res) => {
 
     res.send(roles)
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    res.status(500).json({ error: error.message })
   }
 }
 
