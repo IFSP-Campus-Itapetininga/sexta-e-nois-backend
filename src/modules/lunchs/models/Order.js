@@ -131,7 +131,14 @@ module.exports = (knex = data) => {
 
   const list = async (page = 0, limit = 10, order = 'asc', filter = '') => {
     const [count, data] = await Promise.all([
-      knex.from(TABLE_NAME).count(),
+      knex
+        .from(TABLE_NAME)
+        .modify(function (queryBuilder) {
+          if (filter) {
+            queryBuilder.where(`${TABLE_NAME}.status`, `${filter}`)
+          }
+        })
+        .count(),
       retriveOrderWithProducts()
         .modify(function (queryBuilder) {
           if (filter) {
