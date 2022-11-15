@@ -47,7 +47,6 @@ module.exports = (knex = data) => {
 
     for (let index = 0; index < data.length; index++) {
       const element = data[index]
-
       if (!orders[element.id]) {
         orders[element.id] = {
           id: element.id,
@@ -66,7 +65,8 @@ module.exports = (knex = data) => {
       orders[element.id].produtos.push({
         id: element.produtoId,
         quantidade: element.quantidade,
-        preco: element.preco
+        preco: element.preco,
+        titulo: element.titulo
       })
     }
 
@@ -94,6 +94,7 @@ module.exports = (knex = data) => {
         'marmita_produto.id as produtoId',
         'marmita_order_products.quantidade',
         'marmita_produto.preco',
+        'marmita_produto.titulo',
         'marmita_order.clienteId',
         'marmita_cliente.nome',
         'marmita_cliente.telefone'
@@ -116,10 +117,17 @@ module.exports = (knex = data) => {
       )
   }
 
-  const list = async (page = 0, limit = 10, order = 'asc') => {
+  const list = async (page = 0, limit = 10, order = 'asc', filter) => {
     const [count, data] = await Promise.all([
       knex.from(TABLE_NAME).count(),
-      retriveOrderWithProducts().offset(page).limit(limit)
+      retriveOrderWithProducts()
+        .modify(function (queryBuilder) {
+          if (!!filter) {
+            queryBuilder.where(`${TABLE_NAME}.status`, `${filter}`)
+          }
+        })
+        .offset(page)
+        .limit(limit)
     ])
 
     const quantity = count[0]['count(*)']
