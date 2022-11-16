@@ -2,10 +2,6 @@ const Prof = require('../models/Prof')
 
 const profModel = Prof()
 
-const teste = (req, res) => {
-  res.send('Hello world!')
-}
-
 const create = async (req, res) => {
   const { nome, especialidade } = req.body
 
@@ -67,7 +63,6 @@ const remove = async (req, res) => {
 }
 
 module.exports = {
-  teste,
   create,
   list,
   find,

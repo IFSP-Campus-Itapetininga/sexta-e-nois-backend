@@ -4,8 +4,6 @@ const profController = require('./controllers/prof')
 const ROUTES_PREFIX = '/prof'
 const router = Router()
 
-router.get('/teste',  profController.teste)
-
 router.post('/',      profController.create)
 
 router.get('/',       profController.list)

@@ -3,11 +3,11 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-return knex.schema.createTable('tb_usuario', (table) => {
+return knex.schema.createTable('tbUsuario', (table) => {
     table.increments('id').unsigned().primary()
     table.string('nome').notNullable()
 
-    table.index(['nome'], 'idx_nome', {
+    table.index(['nome'], 'idxNome', {
         storageEngineIndexType: 'hash',})
 
     table.string('tipo').notNullable()
@@ -21,5 +21,5 @@ return knex.schema.createTable('tb_usuario', (table) => {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-    return knex.schema.dropTable('tb_usuario')
+    return knex.schema.dropTable('tbUsuario')
 }

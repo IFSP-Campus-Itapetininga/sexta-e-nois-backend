@@ -3,20 +3,20 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-    return knex.schema.createTable('tb_prof', (table) => {
+    return knex.schema.createTable('tbGrp', (table) => {
         table.increments('id').unsigned().primary()
-        table.integer('id_usuario').unsigned()
-        table.foreign('id_usuario').references('tb_usuario.id')
-        table.string('especialidade').nullable()
+        table.integer('idProf').unsigned()
+        table.foreign('idProf').references('tbProf.id')
+        table.string('descricao').nullable()
         table.timestamp('criadoEm').defaultTo(knex.fn.now())
         table.timestamp('alteradoEm').defaultTo(knex.fn.now())
       })
-}
+};
 
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.dropTable('tb_prof')
-}
+    return knex.schema.dropTable('tbGrp')
+};

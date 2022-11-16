@@ -4,8 +4,6 @@ const pergController = require('./controllers/perg')
 const ROUTES_PREFIX = '/perg'
 const router = Router()
 
-router.get('/teste',  pergController.teste)
-
 router.post('/',      pergController.create)
 
 router.get('/',       pergController.list)

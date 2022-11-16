@@ -2,18 +2,13 @@ const Aluno = require('../models/Aluno')
 
 const alunoModel = Aluno()
 
-const teste = (req, res) => {
-  res.send('Hello world!')
-}
-
 const create = async (req, res) => {
   const { nome, dataNasc } = req.body
 
   try {
     await alunoModel.create({ nome, dataNasc })
-    res.send('criando usuário!')
+    res.status(201).send({message: 'Criando Usuário!'})
 
-    res.status(201).send()
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -67,7 +62,6 @@ const remove = async (req, res) => {
 }
 
 module.exports = {
-  teste,
   create,
   list,
   find,

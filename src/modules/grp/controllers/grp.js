@@ -2,10 +2,6 @@ const Grp = require('../models/Grp')
 
 const grpModel = Grp()
 
-const teste = (req, res) => {
-  res.send('Hello world!')
-}
-
 const create = async (req, res) => {
   const { descricao } = req.body
 
@@ -67,7 +63,7 @@ const remove = async (req, res) => {
 }
 
 module.exports = {
-  teste,
+
   create,
   list,
   find,

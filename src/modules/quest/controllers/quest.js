@@ -2,15 +2,11 @@ const Quest = require('../models/Quest')
 
 const questModel = Quest()
 
-const teste = (req, res) => {
-  res.send('Hello world!')
-}
-
 const create = async (req, res) => {
-  const { id_aluno, id_prof, id_perg, resposta } = req.body
+  const { idAluno, idProf, idPerg, resposta } = req.body
 
   try {
-    await questModel.create({ id_aluno, id_prof, id_perg, resposta })
+    await questModel.create({ idAluno, idProf, idPerg, resposta })
     res.send('criando questionário!')
 
     res.status(201).send()
@@ -43,10 +39,10 @@ const find = async (req, res) => {
 
 const update = async (req, res) => {
   const { id } = req.params
-  const { id_aluno, id_prof, id_perg, resposta } = req.body
+  const { idAluno, idProf, idPerg, resposta } = req.body
 
   try {
-    await questModel.update(id, { id_aluno, id_prof, id_perg, resposta })
+    await questModel.update(id, { idAluno, idProf, idPerg, resposta })
 
     res.status(204).send()
   } catch (error) {
@@ -67,7 +63,6 @@ const remove = async (req, res) => {
 }
 
 module.exports = {
-  teste,
   create,
   list,
   find,

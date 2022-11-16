@@ -2,15 +2,11 @@ const Perg = require('../models/Perg')
 
 const pergModel = Perg()
 
-const teste = (req, res) => {
-  res.send('Hello world!')
-}
-
 const create = async (req, res) => {
-  const { id_prof, id_grp, descricao } = req.body
+  const { idProf, idGrp, descricao } = req.body
 
   try {
-    await pergModel.create({ id_prof, id_grp, descricao })
+    await pergModel.create({ idProf, idGrp, descricao })
     res.send('criando pergunta!')
 
     res.status(201).send()
@@ -43,10 +39,10 @@ const find = async (req, res) => {
 
 const update = async (req, res) => {
   const { id } = req.params
-  const { id_prof, id_grp, descricao } = req.body
+  const { idProf, idGrp, descricao } = req.body
 
   try {
-    await pergModel.update(id, { id_prof, id_grp, descricao })
+    await pergModel.update(id, { idProf, idGrp, descricao })
 
     res.status(204).send()
   } catch (error) {
@@ -67,7 +63,6 @@ const remove = async (req, res) => {
 }
 
 module.exports = {
-  teste,
   create,
   list,
   find,

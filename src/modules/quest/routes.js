@@ -4,8 +4,6 @@ const questController = require('./controllers/quest')
 const ROUTES_PREFIX = '/quest'
 const router = Router()
 
-router.get('/teste',  questController.teste)
-
 router.post('/',      questController.create)
 
 router.get('/',       questController.list)

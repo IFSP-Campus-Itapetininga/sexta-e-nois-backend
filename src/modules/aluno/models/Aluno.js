@@ -1,7 +1,7 @@
 const knex = require('../../../data/connection')
 
 module.exports = () => {
-  const TABLE_NAME = 'tb_aluno'
+  const TABLE_NAME = 'tbAluno'
 
   const create = async data => await knex.insert(data).into(TABLE_NAME)
 

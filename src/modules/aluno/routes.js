@@ -4,8 +4,6 @@ const alunoController = require('./controllers/aluno')
 const ROUTES_PREFIX = '/aluno'
 const router = Router()
 
-router.get('/teste',  alunoController.teste)
-
 router.post('/',      alunoController.create)
 
 router.get('/',       alunoController.list)
