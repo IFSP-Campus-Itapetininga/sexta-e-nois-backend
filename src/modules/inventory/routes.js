@@ -13,6 +13,7 @@ router.patch('/item/:itemid', InventoryController.updateItem)
 
 // transactions
 router.get('/transactions/:itemid', InventoryController.listItemTransactions)
+router.get('/transactions/', InventoryController.listAllTransactions)
 router.post('/transactions/', InventoryController.createItemTransaction)
 
 // Item Has Vendor

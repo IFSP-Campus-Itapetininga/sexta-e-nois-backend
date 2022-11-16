@@ -119,6 +119,28 @@ const listItemTransactions = async (req, res) => {
   }
 }
 
+const listAllTransactions = async (req, res) => {
+  try {
+    const transactions = await itemTransactionModel.listAll()
+    const responseTransaction = {
+      transactions: transactions.map(function (transaction) {
+        return {
+          transacaoid: transaction.transacaoid,
+          item_itemid: transaction.item_itemid,
+          descricao: transaction.descricao,
+          quantidade: parseInt(transaction.quantidade),
+          usuario: transaction.usuario,
+          memo: transaction.memo,
+          datatransacao: transaction.datatransacao
+        }
+      })
+    }
+    res.send(responseTransaction)
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
 const createItemTransaction = async (req, res) => {
   const { itemid, quantidade, usuario, memo, datatransacao } = req.body
   const curbal = await itemModel.getCurbal(itemid)
@@ -238,5 +260,6 @@ module.exports = {
   createItemHasVendor,
   listItemHasVendor,
   listVendorHasItem,
-  removeItemHasVendor
+  removeItemHasVendor,
+  listAllTransactions
 }
