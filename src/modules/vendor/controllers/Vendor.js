@@ -34,11 +34,11 @@ const removeContact = async (req, res) => {
 }
 
 const createVendor = async (req, res) => {
-  const { fornecedor, descricao, cnpj } = req.body
+  const { fornecedor, descricao, cnpj, ativo } = req.body
   if (req.body.endereco && req.body.contato) {
     const { rua, numero, estado, cidade, cep, bairro, complemento } = req.body.endereco
     try {
-      const vendor = await VendorModel.create({ fornecedor, descricao, cnpj })
+      const vendor = await VendorModel.create({ fornecedor, descricao, cnpj, ativo })
       if (vendor) {
         const address = await AddressModel.create({ rua, numero, estado, cidade, cep, bairro, complemento, fornecedor_fornecedorid: vendor[0] })
 
@@ -108,6 +108,17 @@ const findVendor = async (req, res) => {
   }
 }
 
+const removeVendor = async (req, res) => {
+  const { fornecedorid } = req.params
+
+  try {
+    await VendorModel.remove(fornecedorid)
+    res.status(204).send()
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
 const updateAddress = async (req, res) => {
   const { enderecoid, rua, numero, estado, cidade, cep, bairro, complemento } = req.body
 
@@ -137,5 +148,6 @@ module.exports = {
   createContact,
   removeContact,
   updateAddress,
-  updateContact
+  updateContact,
+  removeVendor
 }

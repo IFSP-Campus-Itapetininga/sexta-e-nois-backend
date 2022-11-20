@@ -7,6 +7,7 @@ const router = Router()
 router.post('/', vendorController.createVendor)
 router.get('/', vendorController.listVendor)
 router.get('/:fornecedorid', vendorController.findVendor)
+router.delete('/:fornecedorid', vendorController.removeVendor)
 
 router.post('/contact/', vendorController.createContact)
 router.patch('/contact/', vendorController.updateContact)

@@ -21,8 +21,7 @@ module.exports = () => {
 
   const remove = async fornecedorid => {
     await find(fornecedorid)
-
-    await knex.del().from(TABLE_NAME).where({ fornecedorid })
+    await knex(TABLE_NAME).where({ fornecedorid }).update('ativo', false)
   }
 
   const findin = async vendors => {

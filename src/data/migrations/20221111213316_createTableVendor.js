@@ -8,6 +8,7 @@ exports.up = function (knex) {
     table.string('fornecedor').notNullable()
     table.string('descricao')
     table.string('cnpj')
+    table.string('ativo').notNullable()
   })
 }
 /**
