@@ -23,7 +23,7 @@ const getAllOrders = async (req, res) => {
     const order = query.order || 'asc'
     const filter = query.filter || null
 
-    const data = await OrderModel().list(page, limit, order, filter)
+    const data = await OrderModel().list({ page, limit, order, filter })
     res.json(data).status(200)
   } catch (error) {
     res.status(400).json({

@@ -137,6 +137,7 @@ module.exports = (knex = data) => {
     filter = '',
     date
   }) => {
+    console.log(page, limit)
     const [count, data] = await Promise.all([
       knex
         .from(TABLE_NAME)

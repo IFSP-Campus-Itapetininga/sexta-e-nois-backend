@@ -42,7 +42,7 @@ const getAllClients = async (req, res) => {
     const limit = +query.limit || 10
     const search = query.search || null
 
-    const data = await ClientModel().list(page, limit, search)
+    const data = await ClientModel().list({ page, limit, search })
     res.json(data).status(200)
   } catch (error) {
     res.status(400).json({
