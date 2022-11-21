@@ -64,6 +64,22 @@ module.exports = () => {
    * @param {number} id
    * @returns {*}
    */
+  const findMany = async (id) => {
+    const result = await knex
+      .select('*')
+      .from(TABLE_NAME)
+      .whereIn('id', id)
+      .then((row) => row)
+
+    if (id.length !== result.length) {
+      const resultIds = result.map((item) => item.id)
+      const notIncluded = id.filter((item) => !resultIds.includes(item))
+
+      throw new Error(`Product ${notIncluded[0]} not find`)
+    }
+
+    return result
+  }
 
   /**
    *
@@ -86,5 +102,5 @@ module.exports = () => {
     await knex.del().from(TABLE_NAME).where({ id })
   }
 
-  return { create, find, update, remove, list }
+  return { create, find, update, remove, list, findMany }
 }

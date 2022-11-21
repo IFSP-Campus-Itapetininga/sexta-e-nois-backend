@@ -6,20 +6,24 @@
   "author": "IFSP - Itapetininga",
   "license": "UNLICENSED",
   "scripts": {
+    "seed": "knex seed:run --knexfile src/config/knexfile.js",
     "lint": "eslint src/**/*.js --fix",
     "format": "prettier --write 'src/**/*.js'",
     "start": "nodemon src/index.js",
     "migrate": "knex migrate:latest --knexfile src/config/knexfile.js",
     "database": "docker-compose up -d",
     "migration": "knex migrate:make --knexfile src/config/knexfile.js",
+    "generate:seed": "knex seed:make --knexfile src/config/knexfile.js",
     "generate:module": "plop --plopfile ./generators/plopGenerateModule.js",
     "generate:model": "plop --plopfile ./generators/plopGenerateModel.js"
   },
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "joi": "^17.6.3",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^2.3.0",
     "morgan": "^1.10.0",
     "mysql2": "^2.3.3"

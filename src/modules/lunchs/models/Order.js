@@ -42,46 +42,72 @@ module.exports = (knex = data) => {
       })
   }
 
-  const groupOrders = (data, order = 'asc') => {
+  const retriveProductsFromOrder = async (ids = []) => {
+    const products = await knex
+      .select(
+        'marmita_produto.id as produtoId',
+        'marmita_order_products.orderId',
+        'marmita_order_products.quantidade',
+        'marmita_produto.preco',
+        'marmita_produto.titulo'
+      )
+      .from('marmita_order_products')
+      .whereIn('marmita_order_products.orderId', ids)
+      .leftJoin(
+        'marmita_produto',
+        'marmita_produto.id',
+        'marmita_order_products.productId'
+      )
+
     const orders = {}
+    for (let index = 0; index < products.length; index++) {
+      const element = products[index]
+
+      if (!orders[element.orderId]) {
+        orders[element.orderId] = []
+      }
+
+      orders[element.orderId].push({
+        id: element.produtoId,
+        quantidade: element.quantidade,
+        preco: element.preco,
+        titulo: element.titulo
+      })
+    }
+
+    return orders
+  }
+
+  const groupOrders = async (data) => {
+    const ids = data.map((item) => item.id)
+
+    const products = await retriveProductsFromOrder(ids)
+
+    const orders = []
 
     for (let index = 0; index < data.length; index++) {
       const element = data[index]
+      let produtos = []
 
-      if (!orders[element.id]) {
-        orders[element.id] = {
-          id: element.id,
-          valor_total: element.valor_total,
-          delivery: element.delivery === 1,
-          status: element.status,
-          cliente: {
-            id: element.clienteId,
-            nome: element.nome,
-            telefone: element.telefone
-          },
-          produtos: []
-        }
+      if (products[element.id]) {
+        produtos = products[element.id]
       }
 
-      orders[element.id].produtos.push({
-        id: element.produtoId,
-        quantidade: element.quantidade,
-        preco: element.preco
+      orders.push({
+        id: element.id,
+        valor_total: element.valor_total,
+        delivery: element.delivery === 1,
+        status: element.status,
+        cliente: {
+          id: element.clienteId,
+          nome: element.nome,
+          telefone: element.telefone
+        },
+        produtos
       })
     }
 
-    const rows = Object.entries(orders).map((item) => item[1])
-
-    if (order !== 'asc') {
-      return rows.sort((prev, current) => {
-        if (prev?.id > current?.id) return -1
-        if (prev?.id < current?.id) return 1
-
-        return 0
-      })
-    }
-
-    return rows
+    return orders
   }
 
   const retriveOrderWithProducts = () => {
@@ -91,24 +117,11 @@ module.exports = (knex = data) => {
         `${TABLE_NAME}.valor_total`,
         `${TABLE_NAME}.delivery`,
         `${TABLE_NAME}.status`,
-        'marmita_produto.id as produtoId',
-        'marmita_order_products.quantidade',
-        'marmita_produto.preco',
         'marmita_order.clienteId',
         'marmita_cliente.nome',
         'marmita_cliente.telefone'
       )
       .from(TABLE_NAME)
-      .leftJoin(
-        'marmita_order_products',
-        `${TABLE_NAME}.id`,
-        'marmita_order_products.orderId'
-      )
-      .leftJoin(
-        'marmita_produto',
-        'marmita_produto.id',
-        'marmita_order_products.productId'
-      )
       .leftJoin(
         'marmita_cliente',
         'marmita_cliente.id',
@@ -116,16 +129,31 @@ module.exports = (knex = data) => {
       )
   }
 
-  const list = async (page = 0, limit = 10, order = 'asc') => {
+  const list = async (page = 0, limit = 10, order = 'asc', filter = '') => {
     const [count, data] = await Promise.all([
-      knex.from(TABLE_NAME).count(),
-      retriveOrderWithProducts().offset(page).limit(limit)
+      knex
+        .from(TABLE_NAME)
+        .modify(function (queryBuilder) {
+          if (filter) {
+            queryBuilder.where(`${TABLE_NAME}.status`, `${filter}`)
+          }
+        })
+        .count(),
+      retriveOrderWithProducts()
+        .modify(function (queryBuilder) {
+          if (filter) {
+            queryBuilder.where(`${TABLE_NAME}.status`, `${filter}`)
+          }
+        })
+        .orderBy('id', order)
+        .offset(page)
+        .limit(limit)
     ])
 
     const quantity = count[0]['count(*)']
 
     return {
-      data: groupOrders(data, order),
+      data: await groupOrders(data, order),
       limit,
       page: page + 1,
       totalPage: Math.ceil(quantity / limit) || 1
@@ -137,11 +165,11 @@ module.exports = (knex = data) => {
       .where(`${TABLE_NAME}.id`, id)
       .then((row) => row)
 
-    if (!resultRaw) {
+    if (!resultRaw.length) {
       throw new Error('Order not found')
     }
 
-    const result = groupOrders(resultRaw)
+    const result = await groupOrders(resultRaw)
 
     if (!result.length) {
       throw new Error('Order not found')
