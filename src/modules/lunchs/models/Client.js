@@ -19,7 +19,7 @@ module.exports = () => {
    * @param {number} page
    * @param {number} limit
    */
-  const list = async (page = 0, limit = 10, search) => {
+  const list = async ({ page = 0, limit = 10, search, date }) => {
     const [count, data] = await Promise.all([
       knex.from(TABLE_NAME).count(),
       knex
@@ -30,6 +30,13 @@ module.exports = () => {
             const serchType = /^[0-9]*$/g.test(search) ? 'telefone' : 'nome'
 
             queryBuilder.where(serchType, 'LIKE', `%${search}%`)
+          }
+
+          if (!!date) {
+            queryBuilder.whereBetween(`${TABLE_NAME}.criadoEm`, [
+              date.from,
+              date.to
+            ])
           }
         })
         .offset(page)

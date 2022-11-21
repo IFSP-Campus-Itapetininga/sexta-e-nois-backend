@@ -2,6 +2,7 @@ const { Router } = require('express')
 const ProductController = require('./controllers/Product')
 const ClientController = require('./controllers/Client')
 const OrderController = require('./controllers/Order')
+const StatisticsController = require('./controllers/Statistics')
 
 const ROUTES_PREFIX = '/lunchs'
 const router = Router()
@@ -28,6 +29,9 @@ router.post('/orders/', OrderController.createOrder)
 router.put('/orders/status/:id', OrderController.updateOrderStatus)
 router.put('/orders/:id', OrderController.updateOrder)
 router.delete('/orders/:id', OrderController.deleteOrder)
+
+//Statistics
+router.get('/statistics', StatisticsController.getMarmitaStatitics)
 
 module.exports = {
   ROUTES_PREFIX,
