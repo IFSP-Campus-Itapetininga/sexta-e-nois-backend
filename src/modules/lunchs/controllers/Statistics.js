@@ -3,7 +3,7 @@ const validations = require('../utils/Validations')
 
 const getMarmitaStatitics = async (req, res) => {
   try {
-    const data = req.body
+    const data = req.query
     const validation = validations.ValidationStatisticsSchema.validate(data)
 
     if (validation.error) {
