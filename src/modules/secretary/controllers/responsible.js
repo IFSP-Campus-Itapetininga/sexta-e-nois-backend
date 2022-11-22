@@ -22,9 +22,9 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const students = await responsibleModel.list()
+    const responsiblies = await responsibleModel.list()
 
-    res.send(students)
+    res.send(responsiblies)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -34,9 +34,9 @@ const find = async (req, res) => {
   const { id } = req.params
 
   try {
-    const student = await responsibleModel.find(id)
+    const responsible = await responsibleModel.find(id)
 
-    res.send(student)
+    res.send(responsible)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }

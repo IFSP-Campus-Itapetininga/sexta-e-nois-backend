@@ -1,7 +1,7 @@
-const Aluno = require('../models/Student')
+const Student = require('../models/Student')
 const { ValidationStudent } = require('../utils')
 
-const alunoModel = Aluno()
+const studentModel = Student()
 
 const create = async (req, res) => {
   const data = req.body
@@ -12,7 +12,7 @@ const create = async (req, res) => {
     return
   }
   try {
-    await alunoModel.create(data)
+    await studentModel.create(data)
 
     res.status(201).send()
   } catch (error) {
@@ -22,7 +22,7 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const students = await alunoModel.list()
+    const students = await studentModel.list()
 
     res.send(students)
   } catch (error) {
@@ -34,7 +34,7 @@ const find = async (req, res) => {
   const { id } = req.params
 
   try {
-    const student = await alunoModel.find(id)
+    const student = await studentModel.find(id)
 
     res.send(student)
   } catch (error) {
@@ -53,7 +53,7 @@ const update = async (req, res) => {
   }
 
   try {
-    await alunoModel.update(id, data)
+    await studentModel.update(id, data)
 
     res.status(204).send()
   } catch (error) {
@@ -65,7 +65,7 @@ const remove = async (req, res) => {
   const { id } = req.params
 
   try {
-    await alunoModel.remove(id)
+    await studentModel.remove(id)
 
     res.status(204).send()
   } catch (error) {
