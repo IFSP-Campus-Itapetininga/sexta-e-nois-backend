@@ -57,6 +57,10 @@ const ValidationOrderUpdateSchema = joi.object({
 const ValidationOrderUpdateStatusSchema = joi.object({
   status: joi.string().valid('started', 'finalized', 'canceled').required()
 })
+const ValidationStatisticsSchema = joi.object({
+  initial_date: joi.string().required(),
+  final_date: joi.string().required()
+})
 
 module.exports = {
   ValidationProductSearchSchema,
@@ -66,5 +70,6 @@ module.exports = {
   ValidationClientUpdateSchema,
   ValidationOrderCreateSchema,
   ValidationOrderUpdateSchema,
-  ValidationOrderUpdateStatusSchema
+  ValidationOrderUpdateStatusSchema,
+  ValidationStatisticsSchema
 }

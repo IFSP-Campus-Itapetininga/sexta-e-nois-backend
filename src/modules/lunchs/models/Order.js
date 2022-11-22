@@ -117,6 +117,7 @@ module.exports = (knex = data) => {
         `${TABLE_NAME}.valor_total`,
         `${TABLE_NAME}.delivery`,
         `${TABLE_NAME}.status`,
+        `${TABLE_NAME}.criadoEm`,
         'marmita_order.clienteId',
         'marmita_cliente.nome',
         'marmita_cliente.telefone'
@@ -129,7 +130,14 @@ module.exports = (knex = data) => {
       )
   }
 
-  const list = async (page = 0, limit = 10, order = 'asc', filter = '') => {
+  const list = async ({
+    page = 0,
+    limit = 10,
+    order = 'asc',
+    filter = '',
+    date
+  }) => {
+    console.log(page, limit)
     const [count, data] = await Promise.all([
       knex
         .from(TABLE_NAME)
@@ -143,6 +151,13 @@ module.exports = (knex = data) => {
         .modify(function (queryBuilder) {
           if (filter) {
             queryBuilder.where(`${TABLE_NAME}.status`, `${filter}`)
+          }
+
+          if (!!date) {
+            queryBuilder.whereBetween(`${TABLE_NAME}.criadoEm`, [
+              date.from,
+              date.to
+            ])
           }
         })
         .orderBy('id', order)
