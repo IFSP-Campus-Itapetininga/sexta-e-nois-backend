@@ -14,7 +14,6 @@ module.exports = () => {
 
   const listAll = async () => {
     const result = await knex.select('transacao.*', 'item.descricao').from(TABLE_NAME).join('item', { 'item.itemid': 'transacao.item_itemid' })
-    console.log(result)
     if (!result[0]) { throw new Error('Transactions not found') }
 
     return result

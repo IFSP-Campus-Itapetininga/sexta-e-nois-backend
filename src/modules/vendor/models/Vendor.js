@@ -26,7 +26,6 @@ module.exports = () => {
 
   const findin = async vendors => {
     const result = await knex.select('*').from(TABLE_NAME).whereIn('fornecedorid', vendors)
-    console.log(result)
     if (!result) { throw new Error('Item not found') }
 
     return result

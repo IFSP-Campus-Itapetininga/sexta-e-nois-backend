@@ -47,8 +47,6 @@ const createVendor = async (req, res) => {
         const tamanho = contactList.length
         for (let x = 0; x < tamanho; x++) {
           const contactName = req.body.contato[x].nome
-          const element = contactList[x]
-          console.log(element)
           const { email, telefone, whatsapp, funcao } = req.body.contato[x]
           const contact = await ContactModel.create({ nome: contactName, email, telefone, whatsapp, funcao, fornecedor_fornecedorid: vendor[0] })
           contactids.push(contact[0])

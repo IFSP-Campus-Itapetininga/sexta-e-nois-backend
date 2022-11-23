@@ -12,9 +12,7 @@ const listItems = async (req, res) => {
     const response = {
       items: items.map(function (item) {
         return {
-          itemid: item.itemid,
-          descricao: item.descricao,
-          ativo: item.ativo,
+          ...item,
           saldo: parseInt(item.saldo)
         }
       })
@@ -34,9 +32,7 @@ const findItem = async (req, res) => {
     const response = {
       item: item.map(function (item) {
         return {
-          itemid: item.itemid,
-          descricao: item.descricao,
-          ativo: item.ativo,
+          ...item,
           saldo: parseInt(item.saldo)
         }
       })
@@ -92,7 +88,7 @@ const listItemTransactions = async (req, res) => {
     const responseTransaction = {
       transactions: transactions.map(function (transaction) {
         return {
-          ... transaction,  
+          ...transaction,
           quantidade: parseInt(transaction.quantidade)
         }
       })
@@ -100,10 +96,8 @@ const listItemTransactions = async (req, res) => {
     let responseItem = {
       item: item.map(function (item) {
         return {
-          itemid: item.itemid,
-          descricao: item.descricao,
+          ...item,
           saldo: parseInt(item.saldo),
-          ativo: item.ativo,
           transacoes: responseTransaction.transactions
         }
       })
@@ -121,7 +115,7 @@ const listAllTransactions = async (req, res) => {
     const responseTransaction = {
       transactions: transactions.map(function (transaction) {
         return {
-          ... transaction,
+          ...transaction,
           quantidade: parseInt(transaction.quantidade)
         }
       })
@@ -209,10 +203,8 @@ const listVendorHasItem = async (req, res) => {
         const response = {
           item: result.map(function (item) {
             return {
-              itemid: item.itemid,
-              descricao: item.descricao,
-              saldo: parseInt(item.saldo),
-              ativo: item.ativo
+              ...item,
+              saldo: parseInt(item.saldo)
             }
           })
         }
