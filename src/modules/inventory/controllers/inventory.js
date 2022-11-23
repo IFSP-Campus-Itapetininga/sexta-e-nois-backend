@@ -92,12 +92,8 @@ const listItemTransactions = async (req, res) => {
     const responseTransaction = {
       transactions: transactions.map(function (transaction) {
         return {
-          transacaoid: transaction.transacaoid,
-          item_itemid: transaction.item_itemid,
-          quantidade: parseInt(transaction.quantidade),
-          usuario: transaction.usuario,
-          memo: transaction.memo,
-          datatransacao: transaction.datatransacao
+          ... transaction,  
+          quantidade: parseInt(transaction.quantidade)
         }
       })
     }
@@ -125,13 +121,8 @@ const listAllTransactions = async (req, res) => {
     const responseTransaction = {
       transactions: transactions.map(function (transaction) {
         return {
-          transacaoid: transaction.transacaoid,
-          item_itemid: transaction.item_itemid,
-          descricao: transaction.descricao,
-          quantidade: parseInt(transaction.quantidade),
-          usuario: transaction.usuario,
-          memo: transaction.memo,
-          datatransacao: transaction.datatransacao
+          ... transaction,
+          quantidade: parseInt(transaction.quantidade)
         }
       })
     }
