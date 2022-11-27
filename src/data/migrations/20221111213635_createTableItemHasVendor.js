@@ -3,7 +3,7 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema.createTable('item_has_fornecedor', (table) => {
+  return knex.schema.createTable('itemFornecedor', (table) => {
     table.integer('item_itemid').unsigned().references('itemid').inTable('item').notNullable()
     table.integer('fornecedor_fornecedorid')
       .unsigned()
@@ -18,5 +18,5 @@ exports.up = function (knex) {
      * @returns { Promise<void> }
      */
 exports.down = function (knex) {
-  return knex.schema.dropTable('item_has_fornecedor')
+  return knex.schema.dropTable('itemFornecedor')
 }

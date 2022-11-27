@@ -2,7 +2,7 @@
 const knex = require('../../../data/connection')
 
 module.exports = () => {
-  const TABLE_NAME = 'item_has_fornecedor'
+  const TABLE_NAME = 'itemFornecedor'
 
   const create = async (itemid, fornecedorid, data) => {
     const exist = await find(itemid, fornecedorid)
