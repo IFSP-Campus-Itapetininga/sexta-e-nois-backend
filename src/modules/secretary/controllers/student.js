@@ -1,12 +1,18 @@
-const Event = require('../models/Event')
+const Student = require('../models/Student')
+const { ValidationStudent } = require('../utils')
 
-const eventModel = Event()
+const studentModel = Student()
 
 const create = async (req, res) => {
-  const { titulo, dataInicio, dataTermino, local, responsavel, descricao } = req.body
+  const data = req.body
+  const validation = ValidationStudent.validate(data)
 
+  if (validation.error) {
+    res.status(400).json({ error: validation.error.details })
+    return
+  }
   try {
-    await eventModel.create({ titulo, dataInicio, dataTermino, local, responsavel, descricao })
+    await studentModel.create(data)
 
     res.status(201).send()
   } catch (error) {
@@ -16,11 +22,11 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const events = await eventModel.list()
+    const students = await studentModel.list()
 
-    res.send(events)
+    res.send(students)
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    res.status(400).json({ error: error.message })
   }
 }
 
@@ -28,9 +34,9 @@ const find = async (req, res) => {
   const { id } = req.params
 
   try {
-    const event = await eventModel.find(id)
+    const student = await studentModel.find(id)
 
-    res.send(event)
+    res.send(student)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -38,10 +44,16 @@ const find = async (req, res) => {
 
 const update = async (req, res) => {
   const { id } = req.params
-  const { titulo, dataInicio, dataTermino, local, responsavel, descricao } = req.body
+  const data = req.body
+  const validation = ValidationStudent.validate(data)
+
+  if (validation.error) {
+    res.status(400).json({ error: validation.error.details })
+    return
+  }
 
   try {
-    await eventModel.update(id, { titulo, dataInicio, dataTermino, local, responsavel, descricao })
+    await studentModel.update(id, data)
 
     res.status(204).send()
   } catch (error) {
@@ -53,7 +65,7 @@ const remove = async (req, res) => {
   const { id } = req.params
 
   try {
-    await eventModel.remove(id)
+    await studentModel.remove(id)
 
     res.status(204).send()
   } catch (error) {
