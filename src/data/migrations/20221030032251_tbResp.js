@@ -22,5 +22,5 @@
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.dropTable('tbResp')
+  return knex.schema.dropTable('resposta')
 }
