@@ -6,7 +6,7 @@
     return knex.schema.createTable('resposta', (table) => {
         table.increments('id').unsigned().primary()
         table.integer('idQuest').unsigned()
-        table.foreign('idQuest').references('tbQuest.id')
+        table.foreign('idQuest').references('questionario.id')
         //table.integer('idAluno').unsigned()
         //table.foreign('idAluno').references('tbAluno.id')
         //table.integer('idProf').unsigned()
