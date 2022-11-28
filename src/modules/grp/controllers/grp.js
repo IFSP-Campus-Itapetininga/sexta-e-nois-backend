@@ -17,9 +17,9 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const grp = await grpModel.list()
+    const grps = await grpModel.list()
 
-    res.send(grp)
+    res.send(grps)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -29,9 +29,9 @@ const find = async (req, res) => {
   const { id } = req.params
 
   try {
-    const grp = await grpModel.find(id)
+    const grps = await grpModel.find(id)
 
-    res.send(grp)
+    res.send(grps)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }

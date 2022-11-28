@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const questController = require('./controllers/quest')
 
-const ROUTES_PREFIX = '/quest'
+const ROUTES_PREFIX = '/questionnaires'
 const router = Router()
 
 router.post('/',      questController.create)

@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const pergController = require('./controllers/perg')
 
-const ROUTES_PREFIX = '/perg'
+const ROUTES_PREFIX = '/questions'
 const router = Router()
 
 router.post('/',      pergController.create)

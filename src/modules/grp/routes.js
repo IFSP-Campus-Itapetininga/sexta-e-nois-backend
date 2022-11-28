@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const grpController = require('./controllers/grp')
 
-const ROUTES_PREFIX = '/grp'
+const ROUTES_PREFIX = '/groups'
 const router = Router()
 
 router.post('/',      grpController.create)
