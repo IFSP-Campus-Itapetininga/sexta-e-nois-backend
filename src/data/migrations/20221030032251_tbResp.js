@@ -3,10 +3,10 @@
  * @returns { Promise<void> }
  */
  exports.up = function(knex) {
-    return knex.schema.createTable('tbResp', (table) => {
+    return knex.schema.createTable('resposta', (table) => {
         table.increments('id').unsigned().primary()
         table.integer('idQuest').unsigned()
-        table.foreign('idQuest').references('tbQuest.id')
+        table.foreign('idQuest').references('questionario.id')
         //table.integer('idAluno').unsigned()
         //table.foreign('idAluno').references('tbAluno.id')
         //table.integer('idProf').unsigned()
@@ -22,5 +22,5 @@
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.dropTable('tbResp')
+  return knex.schema.dropTable('resposta')
 }

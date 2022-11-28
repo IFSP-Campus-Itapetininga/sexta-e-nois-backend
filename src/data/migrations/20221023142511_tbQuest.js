@@ -3,7 +3,7 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema.createTable('tbQuest', (table) => {
+  return knex.schema.createTable('questionario', (table) => {
     table.increments('id').unsigned().primary()
     table.integer('idGrp').unsigned()
     table.foreign('idGrp').references('grupo.id')
@@ -18,5 +18,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable('tbQuest')
+  return knex.schema.dropTable('questionario')
 }
