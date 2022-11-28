@@ -1,7 +1,7 @@
 const knex = require('../../../data/connection')
 
 module.exports = () => {
-  const TABLE_NAME = 'tb_perg'
+  const TABLE_NAME = 'pergunta'
 
   const create = async data => await knex.insert(data).into(TABLE_NAME)
 
@@ -9,7 +9,7 @@ module.exports = () => {
 
   const find = async id => {
     const result = await knex.select('*').from(TABLE_NAME).where({ id }).first().then(row => row)
-    if (!result) { throw new Error('Pergunta not found') }
+    if (!result) { throw new Error('Question not found') }
 
     return result
   }
