@@ -3,7 +3,7 @@
  * @returns { Promise<void> }
  */
  exports.up = function(knex) {
-    return knex.schema.createTable('tbResp', (table) => {
+    return knex.schema.createTable('resposta', (table) => {
         table.increments('id').unsigned().primary()
         table.integer('idQuest').unsigned()
         table.foreign('idQuest').references('tbQuest.id')
