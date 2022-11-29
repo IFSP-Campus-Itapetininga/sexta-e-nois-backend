@@ -1,4 +1,4 @@
-const Perg = require('../models/Perg')
+const Perg = require('../models/Quest')
 
 const pergModel = Perg()
 
