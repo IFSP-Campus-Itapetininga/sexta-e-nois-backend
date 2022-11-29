@@ -7,9 +7,8 @@ const create = async (req, res) => {
 
   try {
     await questModel.create({ idAluno, idProf, idPerg, resposta })
-    res.send('criando questionário!')
-
     res.status(201).send()
+
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -17,9 +16,9 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const quest = await questModel.list()
+    const quests = await questModel.list()
 
-    res.send(quest)
+    res.send(quests)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -29,9 +28,9 @@ const find = async (req, res) => {
   const { id } = req.params
 
   try {
-    const quest = await questModel.find(id)
+    const quests = await questModel.find(id)
 
-    res.send(quest)
+    res.send(quests)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }

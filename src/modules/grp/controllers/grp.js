@@ -7,9 +7,8 @@ const create = async (req, res) => {
 
   try {
     await grpModel.create({ descricao })
-    res.send('criando grupo!')
-
     res.status(201).send()
+    
   } catch (error) {
     res.status(400).json({ error: error.message })
   }

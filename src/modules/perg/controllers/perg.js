@@ -8,7 +8,7 @@ const create = async (req, res) => {
   try {
     await pergModel.create({ idProf, idGrp, descricao })
     res.status(201).send()
-    
+
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -16,9 +16,9 @@ const create = async (req, res) => {
 
 const list = async (req, res) => {
   try {
-    const perg = await pergModel.list()
+    const pergs = await pergModel.list()
 
-    res.send(perg)
+    res.send(pergs)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -28,9 +28,9 @@ const find = async (req, res) => {
   const { id } = req.params
 
   try {
-    const perg = await pergModel.find(id)
+    const pergs = await pergModel.find(id)
 
-    res.send(perg)
+    res.send(pergs)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
