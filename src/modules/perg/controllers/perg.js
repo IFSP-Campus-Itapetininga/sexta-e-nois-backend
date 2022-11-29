@@ -7,9 +7,8 @@ const create = async (req, res) => {
 
   try {
     await pergModel.create({ idProf, idGrp, descricao })
-    res.send('criando pergunta!')
-
     res.status(201).send()
+    
   } catch (error) {
     res.status(400).json({ error: error.message })
   }

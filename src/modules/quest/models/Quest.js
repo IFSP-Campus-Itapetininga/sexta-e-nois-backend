@@ -9,7 +9,7 @@ module.exports = () => {
 
   const find = async id => {
     const result = await knex.select('*').from(TABLE_NAME).where({ id }).first().then(row => row)
-    if (!result) { throw new Error('Quest not found') }
+    if (!result) { throw new Error('Questionnaire not found') }
 
     return result
   }
