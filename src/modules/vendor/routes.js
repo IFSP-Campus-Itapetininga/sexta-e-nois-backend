@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const vendorController = require('./controllers/vendor')
+const vendorController = require('./controllers/Vendor')
 
 const ROUTES_PREFIX = '/vendor'
 const router = Router()
