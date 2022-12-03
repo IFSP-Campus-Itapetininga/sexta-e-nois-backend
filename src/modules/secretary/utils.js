@@ -33,21 +33,19 @@ const ValidationAddress = joi.object({
 
 const ValidationRegistration = joi.object({
   aluno_id: joi.number().required(),
-  turma_id: joi.number().required(),
-  data_matricula: joi.string().required()
+  turma_id: joi.number().required()
 })
 
 const ValidationAttendance = joi.object({
   matricula_id: joi.number().required(),
   aula_id: joi.number().required(),
-  data: joi.string().required(),
   presenca: joi.number().required()
 })
 
 const ValidationClass = joi.object({
   titulo: joi.string().required(),
-  dataInicio: joi.date().required(),
-  dataTermino: joi.date().required(),
+  dataInicio: joi.string().required(),
+  dataTermino: joi.string().required(),
   local: joi.string().required(),
   descricao: joi.string().required()
 })
@@ -59,6 +57,21 @@ const ValidationInstructor = joi.object({
   atividade: joi.object().required()
 })
 
+const ValidationWorkshop = joi.object({
+  nome: joi.string().required(),
+  idade_minima: joi.number().required(),
+  idade_maxima: joi.number().required(),
+  outras_restricoes: joi.string(),
+  atividade: joi.object()
+})
+
+const ValidationGroup = joi.object({
+  oficina_id: joi.number().required(),
+  oficineiro_id: joi.number().required(),
+  horario: joi.string().required(),
+  vagas: joi.number().required()
+})
+
 module.exports = {
   ValidationStudent,
   ValidationResponsible,
@@ -67,5 +80,7 @@ module.exports = {
   ValidationRegistration,
   ValidationAttendance,
   ValidationClass,
-  ValidationInstructor
+  ValidationInstructor,
+  ValidationWorkshop,
+  ValidationGroup
 }
