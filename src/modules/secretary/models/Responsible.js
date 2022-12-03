@@ -31,19 +31,19 @@ module.exports = () => {
     'aluno.nome as alunoNome',
     'aluno.data_nascimento as alunoDataNascimento',
     'telefone_responsavel.ddd',
-    'telefone_responsavel.numero',
+    'telefone_responsavel.numero as TelefoneNumero',
     'telefone_responsavel.tipo',
     'endereco_responsavel.cep',
     'endereco_responsavel.logradouro',
-    'endereco_responsavel.numero',
+    'endereco_responsavel.numero as EnderecoNumero',
     'endereco_responsavel.complemento',
     'endereco_responsavel.bairro',
     'endereco_responsavel.cidade',
     'endereco_responsavel.uf'
     ).from(TABLE_NAME)
-      .innerJoin('aluno', `${TABLE_NAME}.id`, 'aluno.responsavel_aluno_id')
-      .innerJoin('telefone_responsavel', `${TABLE_NAME}.id`, 'telefone_responsavel.responsavel_telefone_id')
-      .innerJoin('endereco_responsavel', `${TABLE_NAME}.id`, 'endereco_responsavel.responsavel_endereco_id')
+      .leftJoin('aluno', `${TABLE_NAME}.id`, 'aluno.responsavel_aluno_id')
+      .leftJoin('telefone_responsavel', `${TABLE_NAME}.id`, 'telefone_responsavel.responsavel_telefone_id')
+      .leftJoin('endereco_responsavel', `${TABLE_NAME}.id`, 'endereco_responsavel.responsavel_endereco_id')
       .first().then(row => row)
     if (!result) { throw new Error('Responsible not found') }
 
