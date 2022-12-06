@@ -5,21 +5,7 @@ module.exports = () => {
 
   const create = async data => await knex.insert(data).into(TABLE_NAME).then(([id]) => id)
 
-  const list = async (page = 0, limit = 10) => {
-    const [count, data] = await Promise.all([
-      knex.from(TABLE_NAME).count(),
-      knex.select('id', 'nome', 'nomeUsuario', 'idPapel', 'criadoEm', 'alteradoEm').from(TABLE_NAME).offset(page).limit(limit)
-    ])
-
-    const quantity = count[0]['count(*)']
-
-    return {
-      data,
-      limit,
-      page: page + 1,
-      totalPage: Math.ceil(quantity / limit) || 1
-    }
-  }
+  const list = async () => await knex.select('id', 'nome', 'nomeUsuario', 'idPapel', 'criadoEm', 'alteradoEm').from(TABLE_NAME)
 
   const findById = async id => {
     const result = await knex.select('id', 'nome', 'nomeUsuario', 'idPapel', 'criadoEm', 'alteradoEm').from(TABLE_NAME).where({ id }).first().then(row => row)
