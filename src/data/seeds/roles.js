@@ -11,6 +11,7 @@ exports.seed = async function (knex) {
     { id: 3, nome: 'Instrutor' },
     { id: 4, nome: 'Almoxarife' },
     { id: 5, nome: 'Resp. Evento' },
-    { id: 6, nome: 'Aluno' }
+    { id: 6, nome: 'Aluno' },
+    { id: 7, nome: 'Marmita' }
   ])
 }
