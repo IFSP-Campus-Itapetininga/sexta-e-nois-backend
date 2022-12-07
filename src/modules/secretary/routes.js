@@ -75,27 +75,27 @@ router.delete('/registration/:id', authentication.verifyRole(['Administrador', '
 
 // -----------------------------------------------------------------------------------------------------------------
 
-router.post('/attendance', authentication.verifyRole(['Administrador'], 'Secretário', ), AttendanceController.create)
+router.post('/attendance', authentication.verifyRole(['Administrador', 'Secretário']), AttendanceController.create)
 
-router.get('/attendance', authentication.verifyRole(['Administrador'], 'Secretário'), AttendanceController.list)
+router.get('/attendance', authentication.verifyRole(['Administrador', 'Secretário']), AttendanceController.list)
 
-router.get('/attendance/:id', authentication.verifyRole(['Administrador'], 'Secretário'), AttendanceController.find)
+router.get('/attendance/:id', authentication.verifyRole(['Administrador', 'Secretário']), AttendanceController.find)
 
-router.put('/attendance/:id', authentication.verifyRole(['Administrador'], 'Secretário'), AttendanceController.update)
+router.put('/attendance/:id', authentication.verifyRole(['Administrador', 'Secretário']), AttendanceController.update)
 
-router.put('/attendance/:id', authentication.verifyRole(['Administrador'], 'Secretário'), AttendanceController.remove)
+router.put('/attendance/:id', authentication.verifyRole(['Administrador', 'Secretário']), AttendanceController.remove)
 
 // -----------------------------------------------------------------------------------------------------------------
 
-router.post('/class', authentication.verifyRole(['Administrador'], 'Secretário'), ClassController.create)
+router.post('/class', authentication.verifyRole(['Administrador', 'Secretário']), ClassController.create)
 
-router.get('/class', authentication.verifyRole(['Administrador'], 'Secretário'), ClassController.list)
+router.get('/class', authentication.verifyRole(['Administrador', 'Secretário']), ClassController.list)
 
-router.get('/class/:id', authentication.verifyRole(['Administrador'], 'Secretário'), ClassController.find)
+router.get('/class/:id', authentication.verifyRole(['Administrador', 'Secretário']), ClassController.find)
 
-router.put('/class/:id', authentication.verifyRole(['Administrador'], 'Secretário'), ClassController.update)
+router.put('/class/:id', authentication.verifyRole(['Administrador', 'Secretário']), ClassController.update)
 
-router.delete('/class/:id', authentication.verifyRole(['Administrador'], 'Secretário'), ClassController.remove)
+router.delete('/class/:id', authentication.verifyRole(['Administrador', 'Secretário']), ClassController.remove)
 
 // -----------------------------------------------------------------------------------------------------------------
 
