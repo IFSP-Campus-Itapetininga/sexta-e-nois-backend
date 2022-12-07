@@ -1,7 +1,7 @@
 const knex = require('../../../data/connection')
 
 module.exports = () => {
-  const TABLE_NAME = 'responsavel_aluno'
+  const TABLE_NAME = 'chamada'
 
   const create = async data => await knex.insert(data).into(TABLE_NAME)
 
@@ -23,27 +23,18 @@ module.exports = () => {
 
   const find = async id => {
     const result = await knex.select(`${TABLE_NAME}.id`,
-    `${TABLE_NAME}.cpf`,
-    `${TABLE_NAME}.nome`,
-    `${TABLE_NAME}.data_nascimento`,
-    'aluno.id as alunoId',
-    'aluno.cpf as alunoCpf',
-    'aluno.nome as alunoNome',
-    'aluno.data_nascimento as alunoDataNascimento',
-    'telefone_responsavel.ddd',
-    'telefone_responsavel.numero as TelefoneNumero',
-    'telefone_responsavel.tipo',
-    'endereco_responsavel.cep',
-    'endereco_responsavel.logradouro',
-    'endereco_responsavel.numero as EnderecoNumero',
-    'endereco_responsavel.complemento',
-    'endereco_responsavel.bairro',
-    'endereco_responsavel.cidade',
-    'endereco_responsavel.uf'
+    `${TABLE_NAME}.data`,
+    `${TABLE_NAME}.presenca`,
+    'aula.id as aulaId',
+    'aula.titulo as aulaTitulo',
+    'aula.DataInicio',
+    'aula.dataTermino',
+    'aula.local',
+    'aula.descricao'
+    // 'aluno.nome'
     ).from(TABLE_NAME)
-      .leftJoin('aluno', `${TABLE_NAME}.id`, 'aluno.responsavel_aluno_id')
-      .leftJoin('telefone_responsavel', `${TABLE_NAME}.id`, 'telefone_responsavel.responsavel_telefone_id')
-      .leftJoin('endereco_responsavel', `${TABLE_NAME}.id`, 'endereco_responsavel.responsavel_endereco_id')
+      .innerJoin('aula', `${TABLE_NAME}.aula_id`, 'chamada.id')
+      // .rightJoin('aluno', `${TABLE_NAME}.matricula_id`, 'aluno.id')
       .first().then(row => row)
     if (!result) { throw new Error('Responsible not found') }
 
