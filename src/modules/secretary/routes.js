@@ -10,118 +10,128 @@ const WorkshopController = require('./controllers/workshop')
 const InstructorController = require('./controllers/instructor')
 const GroupController = require('./controllers/group')
 
+const authentication = require('../../utils/middlewares/authentication')
+
 const ROUTES_PREFIX = '/secretary'
 const router = Router()
 
-router.post('/student', studentController.create)
+router.post('/student', authentication.verifyRole(['Administrador', 'Secretário']), studentController.create)
 
-router.get('/student', studentController.list)
+router.get('/student', authentication.verifyRole(['Administrador', 'Secretário']), studentController.list)
 
-router.get('/student/:id', studentController.find)
+router.get('/student/:id', authentication.verifyRole(['Administrador', 'Secretário', 'Aluno']), studentController.find)
 
-router.put('/student/:id', studentController.update)
+router.put('/student/:id', authentication.verifyRole(['Administrador', 'Secretário']), studentController.update)
 
-router.delete('/student/:id', studentController.remove)
+router.delete('/student/:id', authentication.verifyRole(['Administrador', 'Secretário']), studentController.remove)
 
-router.post('/responsible', responsibleController.create)
+// -----------------------------------------------------------------------------------------------------------------
 
-router.get('/responsible', responsibleController.list)
+router.post('/responsible', authentication.verifyRole(['Administrador', 'Secretário']), responsibleController.create)
 
-router.get('/responsible/:id', responsibleController.find)
+router.get('/responsible', authentication.verifyRole(['Administrador', 'Secretário']), responsibleController.list)
 
-router.put('/responsible/:id', responsibleController.update)
+router.get('/responsible/:id', authentication.verifyRole(['Administrador', 'Secretário', 'Aluno']), responsibleController.find)
 
-router.delete('/responsible/:id', responsibleController.remove)
+router.put('/responsible/:id', authentication.verifyRole(['Administrador', 'Secretário']), responsibleController.update)
 
-router.post('/phone', PhoneController.create)
+router.delete('/responsible/:id', authentication.verifyRole(['Administrador', 'Secretário']), responsibleController.remove)
 
-router.get('/phone', PhoneController.list)
+// -----------------------------------------------------------------------------------------------------------------  
 
-router.get('/phone/:id', PhoneController.find)
+router.post('/phone', authentication.verifyRole(['Administrador', 'Secretário']), PhoneController.create)
 
-router.put('/phone/:id', PhoneController.update)
+router.get('/phone', authentication.verifyRole(['Administrador', 'Secretário']), PhoneController.list)
 
-router.delete('/phone/:id', PhoneController.remove)
+router.get('/phone/:id', authentication.verifyRole(['Administrador', 'Secretário']), PhoneController.find)
 
-router.post('/address', AddressController.create)
+router.put('/phone/:id', authentication.verifyRole(['Administrador', 'Secretário']), PhoneController.update)
 
-router.get('/address', AddressController.list)
+router.delete('/phone/:id', authentication.verifyRole(['Administrador', 'Secretário']), PhoneController.remove)
 
-router.get('/address/:id', AddressController.find)
+// -----------------------------------------------------------------------------------------------------------------
 
-router.put('/address/:id', AddressController.update)
+router.post('/address', authentication.verifyRole(['Administrador', 'Secretário']), AddressController.create)
 
-router.delete('/address/:id', AddressController.remove)
+router.get('/address', authentication.verifyRole(['Administrador', 'Secretário']), AddressController.list)
 
-router.post('/registration', RegistrationController.create)
+router.get('/address/:id', authentication.verifyRole(['Administrador', 'Secretário']), AddressController.find)
 
-router.get('/registration', RegistrationController.list)
+router.put('/address/:id', authentication.verifyRole(['Administrador', 'Secretário']), AddressController.update)
 
-router.get('/registration/:id', RegistrationController.find)
+router.delete('/address/:id', authentication.verifyRole(['Administrador', 'Secretário']), AddressController.remove)
 
-router.put('/registration/:id', RegistrationController.update)
+// -----------------------------------------------------------------------------------------------------------------
 
-router.delete('/registration/:id', RegistrationController.remove)
+router.post('/registration', authentication.verifyRole(['Administrador', 'Secretário']), RegistrationController.create)
 
-router.post('/attendance', AttendanceController.create)
+router.get('/registration', authentication.verifyRole(['Administrador', 'Secretário']), RegistrationController.list)
 
-router.get('/attendance', AttendanceController.list)
+router.get('/registration/:id', authentication.verifyRole(['Administrador', 'Secretário', 'Aluno']), RegistrationController.find)
 
-router.get('/attendance/:id', AttendanceController.find)
+router.put('/registration/:id', authentication.verifyRole(['Administrador', 'Secretário']), RegistrationController.update)
 
-router.put('/attendance/:id', AttendanceController.update)
+router.delete('/registration/:id', authentication.verifyRole(['Administrador', 'Secretário']), RegistrationController.remove)
 
-router.delete('/attendance/:id', AttendanceController.remove)
+// -----------------------------------------------------------------------------------------------------------------
 
-router.post('/attendance', AttendanceController.create)
+router.post('/attendance', authentication.verifyRole(['Administrador'], 'Secretário', ), AttendanceController.create)
 
-router.get('/attendance', AttendanceController.list)
+router.get('/attendance', authentication.verifyRole(['Administrador'], 'Secretário'), AttendanceController.list)
 
-router.get('/attendance/:id', AttendanceController.find)
+router.get('/attendance/:id', authentication.verifyRole(['Administrador'], 'Secretário'), AttendanceController.find)
 
-router.put('/attendance/:id', AttendanceController.update)
+router.put('/attendance/:id', authentication.verifyRole(['Administrador'], 'Secretário'), AttendanceController.update)
 
-router.delete('/attendance/:id', AttendanceController.remove)
+router.put('/attendance/:id', authentication.verifyRole(['Administrador'], 'Secretário'), AttendanceController.remove)
 
-router.post('/class', ClassController.create)
+// -----------------------------------------------------------------------------------------------------------------
 
-router.get('/class', ClassController.list)
+router.post('/class', authentication.verifyRole(['Administrador'], 'Secretário'), ClassController.create)
 
-router.get('/class/:id', ClassController.find)
+router.get('/class', authentication.verifyRole(['Administrador'], 'Secretário'), ClassController.list)
 
-router.put('/class/:id', ClassController.update)
+router.get('/class/:id', authentication.verifyRole(['Administrador'], 'Secretário'), ClassController.find)
 
-router.delete('/class/:id', ClassController.remove)
+router.put('/class/:id', authentication.verifyRole(['Administrador'], 'Secretário'), ClassController.update)
 
-router.post('/workshop', WorkshopController.create)
+router.delete('/class/:id', authentication.verifyRole(['Administrador'], 'Secretário'), ClassController.remove)
 
-router.get('/workshop', WorkshopController.list)
+// -----------------------------------------------------------------------------------------------------------------
 
-router.get('/workshop/:id', WorkshopController.find)
+router.post('/workshop', authentication.verifyRole(['Administrador', 'Secretário', 'Instrutor']), WorkshopController.create)
 
-router.put('/workshop/:id', WorkshopController.update)
+router.get('/workshop', authentication.verifyRole(['Administrador', 'Secretário', 'Instrutor', 'Aluno']), WorkshopController.list)
 
-router.delete('/workshop/:id', WorkshopController.remove)
+router.get('/workshop/:id', authentication.verifyRole(['Administrador', 'Secretário', 'Instrutor', 'Aluno']), WorkshopController.find)
 
-router.post('/instructor', InstructorController.create)
+router.put('/workshop/:id', authentication.verifyRole(['Administrador', 'Secretário', 'Instrutor']), WorkshopController.update)
 
-router.get('/instructor', InstructorController.list)
+router.delete('/workshop/:id', authentication.verifyRole(['Administrador', 'Secretário', 'Instrutor']), WorkshopController.remove)
 
-router.get('/instructor/:id', InstructorController.find)
+// -----------------------------------------------------------------------------------------------------------------
 
-router.put('/instructor/:id', InstructorController.update)
+router.post('/instructor', authentication.verifyRole(['Administrador', 'Secretário']), InstructorController.create)
 
-router.delete('/instructor/:id', InstructorController.remove)
+router.get('/instructor', authentication.verifyRole(['Administrador', 'Secretário']), InstructorController.list)
 
-router.post('/group', GroupController.create)
+router.get('/instructor/:id', authentication.verifyRole(['Administrador', 'Secretário', 'Instrutor']), InstructorController.find)
 
-router.get('/group', GroupController.list)
+router.put('/instructor/:id', authentication.verifyRole(['Administrador', 'Secretário']), InstructorController.update)
 
-router.get('/group/:id', GroupController.find)
+router.delete('/instructor/:id', authentication.verifyRole(['Administrador', 'Secretário']), InstructorController.remove)
 
-router.put('/group/:id', GroupController.update)
+// -----------------------------------------------------------------------------------------------------------------
 
-router.delete('/group/:id', GroupController.remove)
+router.post('/group', authentication.verifyRole(['Administrador', 'Secretário', 'Instrutor']), GroupController.create)
+
+router.get('/group', authentication.verifyRole(['Administrador', 'Secretário', 'Instrutor']), GroupController.list)
+
+router.get('/group/:id', authentication.verifyRole(['Administrador', 'Secretário', 'Instrutor', 'Aluno']), GroupController.find)
+
+router.put('/group/:id', authentication.verifyRole(['Administrador', 'Secretário', 'Instrutor']), GroupController.update)
+
+router.delete('/group/:id', authentication.verifyRole(['Administrador', 'Secretário', 'Instrutor']), GroupController.remove)
 
 module.exports = {
   ROUTES_PREFIX,
