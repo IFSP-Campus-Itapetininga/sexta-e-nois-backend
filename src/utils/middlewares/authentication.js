@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const jwtSecret = process.env.JWT_SECRET
 
 class Authentication {
-  static validateAndExtractDataFromToken (header) {
+  static validateAndExtractDataFromToken(header) {
     try {
       if (!header) throw new Error('Authentication header is missing')
 
@@ -11,8 +11,9 @@ class Authentication {
 
       const { user, role } = jwt.verify(token, jwtSecret)
 
-      if (!user.id || !user.name || !user.username || !role.name) throw new Error('Invalid token')
-
+      if (!user.id || !user.name || !user.username || !role.name) {
+        throw new Error('Invalid token')
+      }
       const extractedData = {
         user,
         role
@@ -24,18 +25,27 @@ class Authentication {
     }
   }
 
-  static verifyRole (roles) {
+  static verifyRole(roles) {
     return (req, res, next) => {
       try {
-        const tokenData = this.validateAndExtractDataFromToken(req.headers.authorization)
+        const tokenData = this.validateAndExtractDataFromToken(
+          req.headers.authorization
+        )
 
-        if (!roles.includes(tokenData.role.name)) throw new Error('Unauthorized role. The following roles are permitted: ' + roles.toString())
+        if (!roles.includes(tokenData.role.name)) {
+          throw new Error(
+            'Unauthorized role. The following roles are permitted: ' +
+              roles.toString()
+          )
+        }
 
         req.user = tokenData
 
         return next()
       } catch (error) {
-        throw new Error(error.message)
+        res.status(401).json({
+          message: error.message
+        })
       }
     }
   }
