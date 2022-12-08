@@ -5,7 +5,7 @@
 exports.up = function (knex) {
   return knex.schema.createTable('instrutor', (table) => {
     table.increments('id').unsigned().primary()
-    table.string('nome').defaultTo(knex.fn.now())
+    table.string('nome').notNullable()
     table.string('cpf').notNullable()
     table.string('email').notNullable()
     table.json('atividade').notNullable()
