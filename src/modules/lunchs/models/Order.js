@@ -16,8 +16,10 @@ module.exports = (knex = data) => {
         await Client().find(data.clienteId)
         const products = await validateProducts(data.produtos)
 
+        const productsIncomming = transformeProductsDataQuantity(data.produtos)
+
         const total = products
-          .map((item) => item.preco)
+          .map((item) => item.preco * productsIncomming[item.id].quantidade)
           .reduce((prev, current) => prev + current, 0)
 
         const id = await trx
@@ -40,6 +42,17 @@ module.exports = (knex = data) => {
       .catch((e) => {
         throw new Error(e.message)
       })
+  }
+
+  const transformeProductsDataQuantity = (products) => {
+    const keys = {}
+
+    for (let index = 0; index < products.length; index++) {
+      const element = products[index]
+      keys[element.id] = element
+    }
+
+    return keys
   }
 
   const retriveProductsFromOrder = async (ids = []) => {
@@ -198,8 +211,11 @@ module.exports = (knex = data) => {
     return await knex
       .transaction(async (trx) => {
         const products = await validateProducts(data.produtos)
+
+        const productsIncomming = transformeProductsDataQuantity(data.produtos)
+
         const total = products
-          .map((item) => item.preco)
+          .map((item) => item.preco * productsIncomming[item.id].quantidade)
           .reduce((prev, current) => prev + current, 0)
 
         const orderProducts = data.produtos.map((item) => ({
