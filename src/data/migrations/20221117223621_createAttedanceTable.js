@@ -7,7 +7,7 @@ exports.up = function (knex) {
     table.increments('id').unsigned().primary()
     table.integer('matricula_id').unsigned()
     table.integer('aula_id').unsigned()
-    table.date('data').defaultTo(knex.fn.now())
+    table.timestamp('data').defaultTo(knex.fn.now())
     table.tinyint('presenca').notNullable()
     table.foreign(['matricula_id', 'aula_id']).references(['matricula.id', 'aula_id'])
   })
