@@ -5,7 +5,12 @@ module.exports = () => {
 
   const create = async data => await knex.insert(data).into(TABLE_NAME)
 
-  const list = async () => await knex.select('*').from(TABLE_NAME)
+  const list = async (fornecedorid) => {
+    const result = await knex.select('*').from(TABLE_NAME).where({ fornecedor_fornecedorid: fornecedorid })
+    if (!result) { throw new Error(' not found') }
+
+    return result
+  }
 
   const listByVendor = async fornecedorid => {
     const result = await knex.select('*').from(TABLE_NAME).where({ fornecedor_fornecedorid: fornecedorid })
