@@ -11,6 +11,8 @@ router.get('/', vendorController.listVendor)
 router.get('/:fornecedorid', vendorController.findVendor)
 router.delete('/:fornecedorid', authentication.verifyRole(['Administrador', 'Almoxarife']), vendorController.removeVendor)
 
+router.get('/contact/:fornecedorid', vendorController.listContact)
+
 router.post('/contact/', authentication.verifyRole(['Administrador', 'Almoxarife']), vendorController.createContact)
 router.patch('/contact/', authentication.verifyRole(['Administrador', 'Almoxarife']), vendorController.updateContact)
 router.delete('/contact/:contatoid', authentication.verifyRole(['Administrador', 'Almoxarife']), vendorController.removeContact)
