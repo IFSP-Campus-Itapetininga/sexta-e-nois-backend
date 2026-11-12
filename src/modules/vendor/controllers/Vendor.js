@@ -10,8 +10,17 @@ const createContact = async (req, res) => {
   try {
     const { nome, email, telefone, whatsapp, funcao, fornecedorid } = req.body
     const vendor = await VendorModel.find(fornecedorid)
-    if (!vendor) { throw new Error('Address not found') }
-    const contact = await ContactModel.create({ nome, email, telefone, whatsapp, funcao, fornecedor_fornecedorid: fornecedorid })
+    if (!vendor) {
+      throw new Error('Address not found')
+    }
+    const contact = await ContactModel.create({
+      nome,
+      email,
+      telefone,
+      whatsapp,
+      funcao,
+      fornecedor_fornecedorid: fornecedorid
+    })
     if (contact) {
       res.status(201).send({ contatoid: contact[0] })
     } else {
@@ -36,11 +45,26 @@ const removeContact = async (req, res) => {
 const createVendor = async (req, res) => {
   const { fornecedor, descricao, cnpj, ativo } = req.body
   if (req.body.endereco && req.body.contato) {
-    const { rua, numero, estado, cidade, cep, bairro, complemento } = req.body.endereco
+    const { rua, numero, estado, cidade, cep, bairro, complemento } =
+      req.body.endereco
     try {
-      const vendor = await VendorModel.create({ fornecedor, descricao, cnpj, ativo })
+      const vendor = await VendorModel.create({
+        fornecedor,
+        descricao,
+        cnpj,
+        ativo
+      })
       if (vendor) {
-        const address = await AddressModel.create({ rua, numero, estado, cidade, cep, bairro, complemento, fornecedor_fornecedorid: vendor[0] })
+        const address = await AddressModel.create({
+          rua,
+          numero,
+          estado,
+          cidade,
+          cep,
+          bairro,
+          complemento,
+          fornecedor_fornecedorid: vendor[0]
+        })
 
         const contactids = []
         const contactList = req.body.contato
@@ -48,10 +72,21 @@ const createVendor = async (req, res) => {
         for (let x = 0; x < tamanho; x++) {
           const contactName = req.body.contato[x].nome
           const { email, telefone, whatsapp, funcao } = req.body.contato[x]
-          const contact = await ContactModel.create({ nome: contactName, email, telefone, whatsapp, funcao, fornecedor_fornecedorid: vendor[0] })
+          const contact = await ContactModel.create({
+            nome: contactName,
+            email,
+            telefone,
+            whatsapp,
+            funcao,
+            fornecedor_fornecedorid: vendor[0]
+          })
           contactids.push(contact[0])
         }
-        res.status(201).send({ fornecedor: vendor[0], endereco: address[0], contato: contactids })
+        res.status(201).send({
+          fornecedor: vendor[0],
+          endereco: address[0],
+          contato: contactids
+        })
       } else {
         res.status(201).send({ fornecedor: vendor[0] })
       }
@@ -118,10 +153,19 @@ const removeVendor = async (req, res) => {
 }
 
 const updateAddress = async (req, res) => {
-  const { enderecoid, rua, numero, estado, cidade, cep, bairro, complemento } = req.body
+  const { enderecoid, rua, numero, estado, cidade, cep, bairro, complemento } =
+    req.body
 
   try {
-    await AddressModel.update(enderecoid, { rua, numero, estado, cidade, cep, bairro, complemento })
+    await AddressModel.update(enderecoid, {
+      rua,
+      numero,
+      estado,
+      cidade,
+      cep,
+      bairro,
+      complemento
+    })
     res.status(204).send()
   } catch (error) {
     res.status(400).json({ error: error.message })
@@ -132,8 +176,25 @@ const updateContact = async (req, res) => {
   const { contatoid, nome, email, telefone, whatsapp, funcao } = req.body
 
   try {
-    await ContactModel.update(contatoid, { nome, email, telefone, whatsapp, funcao })
+    await ContactModel.update(contatoid, {
+      nome,
+      email,
+      telefone,
+      whatsapp,
+      funcao
+    })
     res.status(204).send()
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
+const listContact = async (req, res) => {
+  const fornecedorid = req.params.fornecedorid
+  try {
+    const contacts = await ContactModel.list(fornecedorid)
+
+    res.send(contacts)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
@@ -147,5 +208,6 @@ module.exports = {
   removeContact,
   updateAddress,
   updateContact,
-  removeVendor
+  removeVendor,
+  listContact
 }
